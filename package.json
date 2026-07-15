@@ -1,0 +1,15 @@
+{
+  "name": "seccut-backend",
+  "version": "1.0.0",
+  "description": "SecCut - splits an uploaded video into 30-second clips",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.1"
+  }
+}

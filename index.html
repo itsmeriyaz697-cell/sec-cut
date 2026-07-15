@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecCut</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{
+    --bg:#121316;
+    --panel:#1a1c20;
+    --panel-2:#1f2126;
+    --line:#2a2d33;
+    --text:#e9eaec;
+    --text-dim:#8b8f98;
+    --amber:#e8a33d;
+    --amber-dim:#7a5a26;
+    --teal:#2dd4bf;
+    --red:#e0645a;
+    --radius:10px;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:48px 20px;
+  }
+  .app{ width:100%; max-width:640px; }
+
+  header{ margin-bottom:32px; }
+  .brand{ display:flex; align-items:baseline; gap:10px; }
+  .brand .mark{
+    font-family:var(--mono);
+    color:var(--amber);
+    font-size:13px;
+    letter-spacing:0.14em;
+    border:1px solid var(--amber-dim);
+    padding:3px 7px;
+    border-radius:4px;
+  }
+  h1{ font-size:22px; font-weight:600; letter-spacing:-0.01em; }
+  header p{ color:var(--text-dim); font-size:13.5px; margin-top:6px; }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+  }
+  .card + .card{ margin-top:16px; }
+
+  /* ---- Upload zone ---- */
+  .dropzone{
+    border:1.5px dashed var(--line);
+    border-radius:var(--radius);
+    padding:34px 20px;
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .dropzone:hover, .dropzone.drag{
+    border-color:var(--amber-dim);
+    background:rgba(232,163,61,0.04);
+  }
+  .dropzone input{ display:none; }
+  .dropzone .icon{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--amber);
+    letter-spacing:0.1em;
+    margin-bottom:10px;
+  }
+  .dropzone .main{ font-size:14.5px; font-weight:500; }
+  .dropzone .sub{ font-size:12.5px; color:var(--text-dim); margin-top:4px; }
+  .filename{ font-family:var(--mono); font-size:12.5px; color:var(--teal); margin-top:12px; }
+
+  .duration-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:16px;
+  }
+  .duration-label{ font-size:13px; color:var(--text-dim); }
+  .duration-options{ display:flex; gap:8px; }
+  .duration-pill{
+    position:relative;
+    font-family:var(--mono); font-size:12.5px;
+    border:1px solid var(--line); border-radius:6px;
+    padding:6px 14px; cursor:pointer;
+    color:var(--text-dim);
+    transition:border-color .12s ease, color .12s ease, background .12s ease;
+  }
+  .duration-pill input{ position:absolute; opacity:0; pointer-events:none; }
+  .duration-pill:has(input:checked){
+    border-color:var(--amber);
+    color:var(--amber);
+    background:rgba(232,163,61,0.08);
+  }
+
+  .actions{ display:flex; gap:10px; margin-top:16px; }
+  button{
+    font-family:var(--sans);
+    font-size:13.5px;
+    font-weight:600;
+    border-radius:8px;
+    border:1px solid transparent;
+    padding:11px 18px;
+    cursor:pointer;
+    transition:filter .12s ease, opacity .12s ease, transform .06s ease;
+  }
+  button:active{ transform:translateY(1px); }
+  button:disabled{ opacity:0.4; cursor:not-allowed; }
+  .btn-primary{ background:var(--amber); color:#1a1305; }
+  .btn-primary:hover:not(:disabled){ filter:brightness(1.08); }
+  .btn-ghost{ background:transparent; color:var(--text); border-color:var(--line); }
+  .btn-ghost:hover:not(:disabled){ border-color:var(--text-dim); }
+
+  /* ---- Processing state ---- */
+  .status-row{ display:flex; align-items:center; gap:10px; }
+  .spinner{
+    width:14px; height:14px;
+    border-radius:50%;
+    border:2px solid var(--line);
+    border-top-color:var(--amber);
+    animation:spin .7s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .status-text{ font-size:13.5px; color:var(--text-dim); }
+  .timecode{ font-family:var(--mono); color:var(--amber); font-size:13px; margin-left:auto; }
+
+  .progress-track{
+    height:4px; background:var(--panel-2);
+    border-radius:2px; margin-top:14px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:var(--amber);
+    width:0%; transition:width .25s ease;
+  }
+
+  /* ---- Results: filmstrip list ---- */
+  .results-header{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .results-header h2{ font-size:15px; font-weight:600; }
+  .results-header .count{ font-family:var(--mono); font-size:12px; color:var(--text-dim); }
+
+  .clip-list{ list-style:none; display:flex; flex-direction:column; gap:1px; }
+  .clip{
+    position:relative;
+    display:flex; align-items:center; gap:12px;
+    background:var(--panel-2);
+    border-left:2px solid var(--line);
+    padding:12px 14px 12px 18px;
+    font-size:13.5px;
+  }
+  .clip:first-child{ border-radius:8px 8px 0 0; }
+  .clip:last-child{ border-radius:0 0 8px 8px; }
+  .clip::before, .clip::after{
+    content:''; position:absolute; left:-1px;
+    width:5px; height:5px; background:var(--bg);
+    border-radius:50%;
+  }
+  .clip::before{ top:6px; }
+  .clip::after{ bottom:6px; }
+  .clip.done{ border-left-color:var(--teal); }
+  .clip.active{ border-left-color:var(--amber); }
+  .clip .idx{ font-family:var(--mono); color:var(--text-dim); font-size:12px; width:26px; }
+  .clip .name{ flex:1; font-weight:500; }
+  .clip .range{ font-family:var(--mono); color:var(--text-dim); font-size:12px; }
+  .clip .state{ font-family:var(--mono); font-size:11px; width:70px; text-align:right; }
+  .clip .state.done{ color:var(--teal); }
+  .clip .state.pending{ color:var(--text-dim); }
+  .clip .state.active{ color:var(--amber); }
+
+  .empty{ color:var(--text-dim); font-size:13.5px; text-align:center; padding:20px 0; }
+  .hidden{ display:none !important; }
+
+  footer{ margin-top:22px; text-align:center; }
+  footer p{ font-size:11.5px; color:var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div class="brand">
+      <span class="mark">SEC·CUT</span>
+    </div>
+    <h1>Video → clips</h1>
+    <p>Upload a video, pick a clip length, and get every clip in one download.</p>
+  </header>
+
+  <!-- Upload -->
+  <div class="card">
+    <label class="dropzone" id="dropzone" for="fileInput">
+      <div class="icon">[ SELECT FILE ]</div>
+      <div class="main">Click to choose a video, or drag one here</div>
+      <div class="sub">MP4, MOV, WEBM — up to your server's upload limit</div>
+      <div class="filename hidden" id="filename"></div>
+      <input type="file" id="fileInput" accept="video/*">
+    </label>
+    <div class="duration-row">
+      <span class="duration-label">Clip length</span>
+      <div class="duration-options">
+        <label class="duration-pill">
+          <input type="radio" name="duration" value="15">
+          <span>15s</span>
+        </label>
+        <label class="duration-pill">
+          <input type="radio" name="duration" value="30" checked>
+          <span>30s</span>
+        </label>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-primary" id="processBtn" disabled>Split into clips</button>
+    </div>
+  </div>
+
+  <!-- Processing -->
+  <div class="card hidden" id="processingCard">
+    <div class="status-row">
+      <div class="spinner"></div>
+      <span class="status-text" id="processingText">Uploading and splitting…</span>
+      <span class="timecode" id="processingTimecode">00:00</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- Results -->
+  <div class="card hidden" id="resultsCard">
+    <div class="results-header">
+      <h2>Clips ready</h2>
+      <span class="count" id="clipCount">0 files</span>
+    </div>
+    <ul class="clip-list" id="clipList"></ul>
+    <div class="actions">
+      <button class="btn-primary" id="zipBtn">Download all as .zip</button>
+      <button class="btn-ghost" id="sequentialBtn">Download one by one</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Clips are generated server-side and streamed to your browser for download.</p>
+</footer>
+
+<script>
+/* ============================================================
+   SecCut frontend — wiring notes for your Express backend
+   ============================================================
+   Expected server contract (adjust to match your actual routes):
+
+   1) POST /api/split   (multipart/form-data, field name "video")
+      → returns JSON:
+        {
+          "clips": [
+            { "name": "clip_01.mp4", "url": "/clips/clip_01.mp4", "start": "00:00:00", "end": "00:00:30" },
+            { "name": "clip_02.mp4", "url": "/clips/clip_02.mp4", "start": "00:00:30", "end": "00:01:00" },
+            ...
+          ]
+        }
+
+   If your splitting takes a while, either:
+   (a) keep the request open and respond when done, or
+   (b) return a job id immediately and poll GET /api/split/:jobId/status
+       — swap the fetch in processVideo() for that pattern if needed.
+   ============================================================ */
+
+const dropzone      = document.getElementById('dropzone');
+const fileInput      = document.getElementById('fileInput');
+const filenameEl     = document.getElementById('filename');
+const processBtn     = document.getElementById('processBtn');
+
+const processingCard = document.getElementById('processingCard');
+const processingText = document.getElementById('processingText');
+const processingTC    = document.getElementById('processingTimecode');
+const progressFill    = document.getElementById('progressFill');
+
+const resultsCard    = document.getElementById('resultsCard');
+const clipList        = document.getElementById('clipList');
+const clipCount       = document.getElementById('clipCount');
+const zipBtn          = document.getElementById('zipBtn');
+const sequentialBtn   = document.getElementById('sequentialBtn');
+
+let selectedFile = null;
+let clips = []; // populated after processing: [{ name, url, start, end }]
+
+// ---- File selection ----
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length) {
+    selectedFile = fileInput.files[0];
+    filenameEl.textContent = selectedFile.name;
+    filenameEl.classList.remove('hidden');
+    processBtn.disabled = false;
+  }
+});
+
+['dragover','dragleave','drop'].forEach(evt => {
+  dropzone.addEventListener(evt, e => {
+    e.preventDefault();
+    dropzone.classList.toggle('drag', evt === 'dragover');
+    if (evt === 'drop' && e.dataTransfer.files.length) {
+      fileInput.files = e.dataTransfer.files;
+      fileInput.dispatchEvent(new Event('change'));
+    }
+  });
+});
+
+// ---- Kick off processing ----
+processBtn.addEventListener('click', processVideo);
+
+async function processVideo() {
+  if (!selectedFile) return;
+
+  resultsCard.classList.add('hidden');
+  processingCard.classList.remove('hidden');
+  processBtn.disabled = true;
+  setProgress(0, 'Uploading and splitting…');
+
+  const startTime = Date.now();
+  const tick = setInterval(() => {
+    const secs = Math.floor((Date.now() - startTime) / 1000);
+    processingTC.textContent = String(Math.floor(secs / 60)).padStart(2,'0') + ':' + String(secs % 60).padStart(2,'0');
+  }, 1000);
+
+  try {
+    const duration = document.querySelector('input[name="duration"]:checked').value;
+
+    const formData = new FormData();
+    formData.append('video', selectedFile);
+    formData.append('duration', duration);
+
+    // --- Replace with your real endpoint ---
+    const res = await fetch('/api/split', { method: 'POST', body: formData });
+    if (!res.ok) throw new Error('Server returned ' + res.status);
+    const data = await res.json();
+
+    clips = data.clips || [];
+    setProgress(100, 'Done');
+    renderClips(clips);
+
+    processingCard.classList.add('hidden');
+    resultsCard.classList.remove('hidden');
+  } catch (err) {
+    processingText.textContent = 'Something went wrong: ' + err.message;
+    processingText.style.color = 'var(--red)';
+  } finally {
+    clearInterval(tick);
+    processBtn.disabled = false;
+  }
+}
+
+function setProgress(pct, label) {
+  progressFill.style.width = pct + '%';
+  processingText.textContent = label;
+}
+
+// ---- Render clip list ----
+function renderClips(list) {
+  clipList.innerHTML = '';
+  clipCount.textContent = list.length + (list.length === 1 ? ' file' : ' files');
+
+  list.forEach((clip, i) => {
+    const li = document.createElement('li');
+    li.className = 'clip';
+    li.id = 'clip-row-' + i;
+    li.innerHTML = `
+      <span class="idx">${String(i + 1).padStart(2,'0')}</span>
+      <span class="name">${clip.name}</span>
+      <span class="range">${clip.start || ''}–${clip.end || ''}</span>
+      <span class="state pending" id="clip-state-${i}">pending</span>
+    `;
+    clipList.appendChild(li);
+  });
+}
+
+function setClipState(i, state) {
+  const row = document.getElementById('clip-row-' + i);
+  const stateEl = document.getElementById('clip-state-' + i);
+  if (!row || !stateEl) return;
+  row.classList.remove('active','done');
+  stateEl.classList.remove('active','done','pending');
+  if (state === 'active') { row.classList.add('active'); stateEl.classList.add('active'); stateEl.textContent = 'downloading'; }
+  if (state === 'done')   { row.classList.add('done');   stateEl.classList.add('done');   stateEl.textContent = 'done'; }
+}
+
+// ---- Option A: sequential auto-download ----
+sequentialBtn.addEventListener('click', () => downloadSequentially(clips));
+
+async function downloadSequentially(list) {
+  sequentialBtn.disabled = true;
+  zipBtn.disabled = true;
+
+  for (let i = 0; i < list.length; i++) {
+    setClipState(i, 'active');
+    await triggerDownload(list[i].url, list[i].name);
+    setClipState(i, 'done');
+    // small gap so the browser doesn't block rapid-fire downloads
+    await new Promise(r => setTimeout(r, 400));
+  }
+
+  sequentialBtn.disabled = false;
+  zipBtn.disabled = false;
+}
+
+function triggerDownload(url, filename) {
+  return new Promise((resolve) => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    // no reliable "download finished" event for same-tab downloads,
+    // so we resolve immediately after triggering it
+    setTimeout(resolve, 50);
+  });
+}
+
+// ---- Option B: bundle into a single .zip with JSZip ----
+zipBtn.addEventListener('click', () => downloadAsZip(clips));
+
+async function downloadAsZip(list) {
+  if (!list.length) return;
+  zipBtn.disabled = true;
+  sequentialBtn.disabled = true;
+  const originalLabel = zipBtn.textContent;
+
+  try {
+    const zip = new JSZip();
+
+    for (let i = 0; i < list.length; i++) {
+      setClipState(i, 'active');
+      zipBtn.textContent = `Zipping ${i + 1}/${list.length}…`;
+
+      const res = await fetch(list[i].url);
+      if (!res.ok) throw new Error(`Failed to fetch ${list[i].name}`);
+      const blob = await res.blob();
+      zip.file(list[i].name, blob);
+
+      setClipState(i, 'done');
+    }
+
+    zipBtn.textContent = 'Compressing…';
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'seccut_clips.zip';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    alert('Could not build zip: ' + err.message);
+  } finally {
+    zipBtn.textContent = originalLabel;
+    zipBtn.disabled = false;
+    sequentialBtn.disabled = false;
+  }
+}
+</script>
+
+</body>
+</html>
