@@ -3,7 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SecCut</title>
+<title>SecCut - Free Online Video Splitter</title>
+
+<!-- Google AdSense Script -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3176406028641137"
+     crossorigin="anonymous"></script>
+
+<!-- Your Brand New Logo Linked as Favicon -->
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+<!-- Meta Tags for Google Search Results -->
+<meta name="description" content="Chop long videos into perfect clips for TikTok, Shorts, and Reels instantly. Free online utility with zero signups.">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   :root{
@@ -36,7 +48,15 @@
   .app{ width:100%; max-width:640px; }
 
   header{ margin-bottom:32px; }
-  .brand{ display:flex; align-items:baseline; gap:10px; }
+  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  
+  /* Logo styling inside the webpage header */
+  .brand .logo-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
   .brand .mark{
     font-family:var(--mono);
     color:var(--amber);
@@ -191,9 +211,11 @@
 <div class="app">
   <header>
     <div class="brand">
+      <!-- New Logo Displayed in UI Header -->
+      <img src="favicon.ico" class="logo-img" alt="SecCut Icon">
       <span class="mark">SEC·CUT</span>
     </div>
-    <h1>Made by Riyaz Chalise<h1>
+    <h1>Made by Riyaz Chalise</h1>
     <h1>Video → clips</h1>
     <p>Upload a video, pick a clip length, and get every clip in one download.</p>
   </header>
@@ -254,27 +276,6 @@
 </footer>
 
 <script>
-/* ============================================================
-   SecCut frontend — wiring notes for your Express backend
-   ============================================================
-   Expected server contract (adjust to match your actual routes):
-
-   1) POST /api/split   (multipart/form-data, field name "video")
-      → returns JSON:
-        {
-          "clips": [
-            { "name": "clip_01.mp4", "url": "/clips/clip_01.mp4", "start": "00:00:00", "end": "00:00:30" },
-            { "name": "clip_02.mp4", "url": "/clips/clip_02.mp4", "start": "00:00:30", "end": "00:01:00" },
-            ...
-          ]
-        }
-
-   If your splitting takes a while, either:
-   (a) keep the request open and respond when done, or
-   (b) return a job id immediately and poll GET /api/split/:jobId/status
-       — swap the fetch in processVideo() for that pattern if needed.
-   ============================================================ */
-
 const dropzone      = document.getElementById('dropzone');
 const fileInput      = document.getElementById('fileInput');
 const filenameEl     = document.getElementById('filename');
@@ -292,7 +293,7 @@ const zipBtn          = document.getElementById('zipBtn');
 const sequentialBtn   = document.getElementById('sequentialBtn');
 
 let selectedFile = null;
-let clips = []; // populated after processing: [{ name, url, start, end }]
+let clips = []; 
 
 // ---- File selection ----
 fileInput.addEventListener('change', () => {
@@ -339,7 +340,7 @@ async function processVideo() {
     formData.append('video', selectedFile);
     formData.append('duration', duration);
 
-    // --- Replace with your real endpoint ---
+    // Dynamic Server Endpoint Call
     const res = await fetch('/api/split', { method: 'POST', body: formData });
     if (!res.ok) throw new Error('Server returned ' + res.status);
     const data = await res.json();
@@ -404,7 +405,6 @@ async function downloadSequentially(list) {
     setClipState(i, 'active');
     await triggerDownload(list[i].url, list[i].name);
     setClipState(i, 'done');
-    // small gap so the browser doesn't block rapid-fire downloads
     await new Promise(r => setTimeout(r, 400));
   }
 
@@ -420,8 +420,6 @@ function triggerDownload(url, filename) {
     document.body.appendChild(a);
     a.click();
     a.remove();
-    // no reliable "download finished" event for same-tab downloads,
-    // so we resolve immediately after triggering it
     setTimeout(resolve, 50);
   });
 }
