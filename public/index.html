@@ -1,650 +1,1617 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SecCut – Free Online Video Splitter | Cut Videos into TikTok, Shorts & Reels Clips</title>
-<meta name="description" content="Split any video into 15s or 30s clips free, right in your browser. No signup, no watermark, no software install. Perfect for TikTok, YouTube Shorts, and Instagram Reels — powered by SecCut.">
-<meta name="keywords" content="video splitter, video clipper, split video into clips, video to shorts, video to tiktok clips, free video cutter online, cut video into parts">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<meta name="author" content="Riyaz Chalise">
-<link rel="canonical" href="https://sec-cut.onrender.com/">
+  <meta charset="UTF-8">
 
-<!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="SecCut">
-<meta property="og:title" content="SecCut – Free Online Video Splitter for TikTok, Shorts & Reels">
-<meta property="og:description" content="Split any video into 15s or 30s clips free, right in your browser. No signup, no watermark, no software install.">
-<meta property="og:url" content="https://sec-cut.onrender.com/">
-<meta property="og:image" content="https://sec-cut.onrender.com/favicon.ico">
-<meta property="og:locale" content="en_US">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0b0d">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="SecCut">
 
-<!-- Twitter -->
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SecCut – Free Online Video Splitter for TikTok, Shorts & Reels">
-<meta name="twitter:description" content="Split any video into 15s or 30s clips free, right in your browser. No signup, no watermark.">
-<meta name="twitter:image" content="https://sec-cut.onrender.com/favicon.ico">
+  <title>SecCut – Free Online Video Splitter</title>
 
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <meta name="description"
+        content="SecCut is a simple free online video splitter. Upload a video, choose 15 or 30 second clips, and download your split videos.">
+  <meta name="keywords"
+        content="video splitter, split video online, free video cutter, TikTok video splitter, YouTube Shorts, Instagram Reels">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Riyaz Chalise">
 
-<!-- Structured data: SoftwareApplication -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "SecCut",
-  "url": "https://sec-cut.onrender.com/",
-  "applicationCategory": "MultimediaApplication",
-  "operatingSystem": "Any (Web-based)",
-  "description": "Free online tool to split a video into 15 or 30 second clips for TikTok, YouTube Shorts, and Instagram Reels. No signup required.",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "author": {
-    "@type": "Person",
-    "name": "Riyaz Chalise",
-    "url": "https://riyazchalise.com"
-  }
-}
-</script>
+  <link rel="canonical" href="https://sec-cut.onrender.com/">
+  <link rel="manifest" href="/manifest.json">
 
-<!-- Google AdSense Script -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3176406028641137"
-     crossorigin="anonymous"></script>
+  <meta property="og:title" content="SecCut – Free Online Video Splitter">
+  <meta property="og:description"
+        content="Split your videos into short clips quickly and easily with SecCut.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sec-cut.onrender.com/">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  <link rel="icon" href="/favicon.ico">
 
-  :root{
-    /* ---- surface tokens: a brushed-metal editing bay, not a flat UI ---- */
-    --bg-0:#0a0b0d;
-    --bg-1:#17181c;
-    --bg-2:#1e2025;
-    --metal-hi:#33363d;
-    --metal-lo:#08090a;
-    --line:#2c2f36;
-    --line-soft:#23252b;
+  <!-- Google AdSense -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3176406028641137"
+    crossorigin="anonymous"></script>
 
-    --text:#edeef0;
-    --text-dim:#8b8f98;
-    --text-faint:#5c5f66;
+  <!-- JSZip -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-    --amber:#e8a33d;
-    --amber-deep:#9c6a1f;
-    --amber-glow:rgba(232,163,61,0.35);
-    --teal:#2dd4bf;
-    --teal-deep:#14776c;
-    --red:#e0645a;
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    --radius:14px;
-    --radius-sm:8px;
-    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-    --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --display:'Sora', var(--sans);
-  }
+    :root {
+      --bg: #08090b;
+      --card: #111317;
+      --card2: #17191e;
+      --border: #292d34;
+      --text: #f4f5f7;
+      --muted: #9da3ad;
+      --accent: #ffffff;
+      --success: #55d98a;
+      --danger: #ff6868;
+    }
 
-  *{ box-sizing:border-box; margin:0; padding:0; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-  body{
-    background:
-      radial-gradient(1200px 600px at 50% -10%, #1a1c21 0%, var(--bg-0) 55%),
-      var(--bg-0);
-    color:var(--text);
-    font-family:var(--sans);
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    padding:56px 20px 80px;
-  }
+    body {
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 50% -10%, #22252b 0%, #0b0c0f 38%, #08090b 70%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
 
-  /* ---- signature: filmstrip rail frame around the whole app ---- */
-  .filmframe{
-    width:100%;
-    max-width:720px;
-    display:grid;
-    grid-template-columns:22px 1fr 22px;
-    gap:14px;
-  }
-  .sprockets{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:16px;
-    padding-top:6px;
-  }
-  .sprockets span{
-    width:9px; height:9px;
-    border-radius:2px;
-    background:var(--metal-lo);
-    box-shadow:
-      inset 0 1px 1px rgba(0,0,0,0.8),
-      0 1px 0 rgba(255,255,255,0.04);
-  }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-  .app{ width:100%; max-width:640px; margin:0 auto; }
+    button,
+    input {
+      font: inherit;
+    }
 
-  header{ margin-bottom:30px; }
-  .brand{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
-  .brand .logo-img{
-    width:26px; height:26px;
-    border-radius:7px;
-    object-fit:cover;
-    box-shadow:0 1px 0 rgba(255,255,255,0.15), 0 3px 8px rgba(0,0,0,0.5);
-  }
-  .brand .mark{
-    font-family:var(--mono);
-    color:var(--amber);
-    font-size:12px;
-    font-weight:600;
-    letter-spacing:0.18em;
-    border:1px solid var(--amber-deep);
-    background:linear-gradient(180deg, rgba(232,163,61,0.14), rgba(232,163,61,0.02));
-    padding:4px 8px;
-    border-radius:5px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-  .byline{
-    font-size:12px;
-    color:var(--text-faint);
-    font-family:var(--mono);
-    letter-spacing:0.02em;
-    margin-bottom:4px;
-  }
-  h1{
-    font-family:var(--display);
-    font-size:26px;
-    font-weight:700;
-    letter-spacing:-0.02em;
-    line-height:1.15;
-    background:linear-gradient(180deg, #ffffff 0%, #c7cad0 100%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-  }
-  header p{ color:var(--text-dim); font-size:13.5px; margin-top:10px; max-width:46ch; }
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: auto;
+    }
 
-  /* ---- panel: welded-metal card with real bevel ---- */
-  .card{
-    background:linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:24px;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.05),
-      inset 0 -1px 0 rgba(0,0,0,0.4),
-      0 1px 0 rgba(255,255,255,0.03),
-      0 18px 30px -18px rgba(0,0,0,0.65);
-    position:relative;
-  }
-  .card + .card{ margin-top:16px; }
+    /* HEADER */
 
-  /* ---- dropzone: recessed loader slot, not a flat dashed box ---- */
-  .dropzone{
-    display:block;
-    border:1px solid var(--line-soft);
-    border-radius:var(--radius-sm);
-    padding:36px 20px;
-    text-align:center;
-    cursor:pointer;
-    background:
-      linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.1)),
-      var(--bg-0);
-    box-shadow:
-      inset 0 3px 8px rgba(0,0,0,0.65),
-      inset 0 -1px 0 rgba(255,255,255,0.03);
-    transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
-  }
-  .dropzone:hover, .dropzone.drag{
-    border-color:var(--amber-deep);
-    box-shadow:
-      inset 0 3px 10px rgba(0,0,0,0.7),
-      inset 0 -1px 0 rgba(255,255,255,0.03),
-      0 0 0 1px var(--amber-glow);
-  }
-  .dropzone input{ display:none; }
-  .dropzone .icon{
-    font-family:var(--mono);
-    font-size:11.5px;
-    color:var(--amber);
-    letter-spacing:0.14em;
-    margin-bottom:12px;
-    text-shadow:0 0 12px var(--amber-glow);
-  }
-  .dropzone .main{ font-size:14.5px; font-weight:500; }
-  .dropzone .sub{ font-size:12.5px; color:var(--text-dim); margin-top:5px; }
-  .filename{
-    display:inline-block;
-    font-family:var(--mono); font-size:12px; color:var(--teal);
-    margin-top:14px;
-    padding:4px 10px;
-    border-radius:5px;
-    background:rgba(45,212,191,0.08);
-    border:1px solid var(--teal-deep);
-  }
+    header {
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      background: rgba(8,9,11,.8);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-  .duration-row{
-    display:flex; align-items:center; justify-content:space-between;
-    margin-top:18px;
-  }
-  .duration-label{ font-size:12.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; }
-  .duration-options{
-    display:flex; gap:2px;
-    padding:3px;
-    background:var(--bg-0);
-    border-radius:8px;
-    border:1px solid var(--line-soft);
-    box-shadow:inset 0 2px 4px rgba(0,0,0,0.6);
-  }
-  .duration-pill{
-    position:relative;
-    font-family:var(--mono); font-size:12.5px; font-weight:500;
-    border-radius:6px;
-    padding:7px 15px; cursor:pointer;
-    color:var(--text-dim);
-    transition:color .12s ease, background .12s ease, box-shadow .12s ease;
-  }
-  .duration-pill input{ position:absolute; opacity:0; pointer-events:none; }
-  .duration-pill:has(input:checked){
-    color:#1a1305;
-    background:linear-gradient(180deg, #f0b558, var(--amber));
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.4),
-      0 1px 2px rgba(0,0,0,0.4),
-      0 0 14px var(--amber-glow);
-  }
+    .nav {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
 
-  .actions{ display:flex; gap:10px; margin-top:20px; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      font-size: 21px;
+      letter-spacing: -.5px;
+    }
 
-  /* ---- buttons: backlit pushbuttons with real travel on click ---- */
-  button{
-    font-family:var(--sans);
-    font-size:13.5px;
-    font-weight:600;
-    border-radius:9px;
-    border:1px solid transparent;
-    padding:12px 20px;
-    cursor:pointer;
-    transition:filter .12s ease, opacity .12s ease, transform .08s ease, box-shadow .08s ease;
-  }
-  button:active{ transform:translateY(2px); }
-  button:disabled{ opacity:0.35; cursor:not-allowed; }
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #252930, #0d0f12);
+      border: 1px solid #373b43;
+      box-shadow: inset 0 1px rgba(255,255,255,.1);
+    }
 
-  .btn-primary{
-    background:linear-gradient(180deg, #f2b862 0%, var(--amber) 55%, #c9862c 100%);
-    color:#241804;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.55),
-      inset 0 -2px 3px rgba(0,0,0,0.25),
-      0 6px 14px -6px var(--amber-glow),
-      0 1px 0 rgba(0,0,0,0.5);
-  }
-  .btn-primary:hover:not(:disabled){ filter:brightness(1.06); }
-  .btn-primary:active:not(:disabled){
-    box-shadow:
-      inset 0 2px 4px rgba(0,0,0,0.35),
-      0 2px 6px -4px var(--amber-glow);
-  }
+    .logo span {
+      font-size: 17px;
+    }
 
-  .btn-ghost{
-    background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
-    color:var(--text);
-    border-color:var(--line);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.06),
-      0 1px 0 rgba(0,0,0,0.5);
-  }
-  .btn-ghost:hover:not(:disabled){ border-color:var(--text-dim); }
-  .btn-ghost:active:not(:disabled){ box-shadow:inset 0 2px 4px rgba(0,0,0,0.4); }
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      color: #aeb4bd;
+      font-size: 14px;
+    }
 
-  /* ---- processing state ---- */
-  .status-row{ display:flex; align-items:center; gap:10px; }
-  .spinner{
-    width:15px; height:15px;
-    border-radius:50%;
-    border:2px solid var(--line);
-    border-top-color:var(--amber);
-    box-shadow:0 0 8px var(--amber-glow);
-    animation:spin .7s linear infinite;
-  }
-  @keyframes spin{ to{ transform:rotate(360deg); } }
-  .status-text{ font-size:13.5px; color:var(--text-dim); }
-  .timecode{
-    font-family:var(--mono); color:var(--amber); font-size:13px; margin-left:auto;
-    text-shadow:0 0 10px var(--amber-glow);
-  }
+    .nav-links a:hover {
+      color: white;
+    }
 
-  .progress-track{
-    height:6px;
-    background:var(--bg-0);
-    border-radius:3px; margin-top:16px; overflow:hidden;
-    box-shadow:inset 0 2px 3px rgba(0,0,0,0.7);
-  }
-  .progress-fill{
-    height:100%;
-    background:linear-gradient(90deg, var(--amber-deep), var(--amber));
-    box-shadow:0 0 10px var(--amber-glow);
-    width:0%; transition:width .25s ease;
-  }
+    /* HERO */
 
-  /* ---- results: filmstrip list, sprocket-perforated card edge ---- */
-  .results-header{
-    display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:16px;
-  }
-  .results-header h2{ font-family:var(--display); font-size:15px; font-weight:600; }
-  .results-header .count{
-    font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
-    padding:3px 8px; border-radius:5px; background:var(--bg-0); border:1px solid var(--line-soft);
-  }
+    .hero {
+      text-align: center;
+      padding: 70px 0 35px;
+    }
 
-  .clip-list{ list-style:none; display:flex; flex-direction:column; gap:2px; }
-  .clip{
-    position:relative;
-    display:flex; align-items:center; gap:12px;
-    background:var(--bg-0);
-    border:1px solid var(--line-soft);
-    border-left:3px solid var(--line);
-    padding:12px 14px 12px 16px;
-    font-size:13.5px;
-    box-shadow:inset 0 1px 2px rgba(0,0,0,0.4);
-  }
-  .clip:first-child{ border-radius:8px 8px 0 0; }
-  .clip:last-child{ border-radius:0 0 8px 8px; }
-  .clip.done{ border-left-color:var(--teal); }
-  .clip.active{ border-left-color:var(--amber); box-shadow:inset 0 1px 2px rgba(0,0,0,0.4), 0 0 12px -4px var(--amber-glow); }
-  .clip .idx{ font-family:var(--mono); color:var(--text-faint); font-size:12px; width:24px; }
-  .clip .name{ flex:1; font-weight:500; }
-  .clip .range{ font-family:var(--mono); color:var(--text-dim); font-size:12px; }
-  .clip .state{ font-family:var(--mono); font-size:11px; width:74px; text-align:right; letter-spacing:0.02em; }
-  .clip .state.done{ color:var(--teal); text-shadow:0 0 8px rgba(45,212,191,0.35); }
-  .clip .state.pending{ color:var(--text-faint); }
-  .clip .state.active{ color:var(--amber); text-shadow:0 0 8px var(--amber-glow); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      color: #c7ccd3;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
 
-  .empty{ color:var(--text-dim); font-size:13.5px; text-align:center; padding:20px 0; }
-  .hidden{ display:none !important; }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--success);
+      border-radius: 50%;
+    }
 
-  footer{ margin-top:26px; text-align:center; }
-  footer p{ font-size:11px; color:var(--text-faint); font-family:var(--mono); }
+    h1 {
+      font-size: clamp(38px, 7vw, 70px);
+      line-height: 1.02;
+      letter-spacing: -3px;
+      margin-bottom: 18px;
+    }
 
-  @media (max-width:560px){
-    .filmframe{ grid-template-columns:12px 1fr 12px; gap:8px; }
-  }
-</style>
+    .hero p {
+      max-width: 680px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    /* TOOL */
+
+    .tool-card {
+      max-width: 850px;
+      margin: 25px auto 70px;
+      padding: 22px;
+      border-radius: 22px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+      border: 1px solid var(--border);
+      box-shadow:
+        0 25px 70px rgba(0,0,0,.35),
+        inset 0 1px rgba(255,255,255,.05);
+    }
+
+    .tool-title {
+      margin-bottom: 18px;
+    }
+
+    .tool-title h2 {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .tool-title p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* DROPZONE */
+
+    .dropzone {
+      border: 2px dashed #383d46;
+      border-radius: 18px;
+      min-height: 270px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 35px 20px;
+      cursor: pointer;
+      transition: .2s ease;
+      background: rgba(255,255,255,.015);
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover {
+      border-color: #858b95;
+      background: rgba(255,255,255,.04);
+      transform: translateY(-1px);
+    }
+
+    .upload-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 20px;
+      background: #1a1d22;
+      border: 1px solid #30343b;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      font-size: 30px;
+    }
+
+    .dropzone h3 {
+      font-size: 21px;
+      margin-bottom: 7px;
+    }
+
+    .dropzone p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .browse-btn {
+      display: inline-block;
+      padding: 10px 17px;
+      border-radius: 9px;
+      background: white;
+      color: #090a0c;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .formats {
+      color: #737983;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    /* FILE SELECTED */
+
+    .file-box {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 14px;
+      background: #16191e;
+      border: 1px solid var(--border);
+      align-items: center;
+      gap: 13px;
+    }
+
+    .file-box.show {
+      display: flex;
+    }
+
+    .file-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 10px;
+      background: #24272d;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .file-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .file-name {
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-size {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .remove-file {
+      border: 0;
+      background: transparent;
+      color: #8c929c;
+      cursor: pointer;
+      font-size: 20px;
+      padding: 5px;
+    }
+
+    .remove-file:hover {
+      color: var(--danger);
+    }
+
+    /* OPTIONS */
+
+    .options {
+      margin-top: 22px;
+    }
+
+    .options-title {
+      font-weight: 700;
+      margin-bottom: 11px;
+      font-size: 14px;
+    }
+
+    .duration-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .duration-option {
+      position: relative;
+    }
+
+    .duration-option input {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .duration-label {
+      display: block;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      background: #121419;
+      transition: .2s;
+    }
+
+    .duration-label strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .duration-label span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .duration-option input:checked + .duration-label {
+      border-color: #aeb4bd;
+      background: #1c1f25;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+    }
+
+    /* PROCESS BUTTON */
+
+    .process-btn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 15px;
+      border: 0;
+      border-radius: 12px;
+      background: white;
+      color: #08090b;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .process-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(255,255,255,.08);
+    }
+
+    .process-btn:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+      transform: none;
+    }
+
+    /* STATUS */
+
+    .status {
+      display: none;
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #15181d;
+      border: 1px solid var(--border);
+      color: #c7cbd2;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #444950;
+      border-top-color: white;
+      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* RESULTS */
+
+    .results {
+      display: none;
+      margin-top: 25px;
+    }
+
+    .results.show {
+      display: block;
+    }
+
+    .results h3 {
+      margin-bottom: 12px;
+    }
+
+    .clip-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .clip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #15181d;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .clip-number {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      background: #24272d;
+      border-radius: 9px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .clip-name {
+      flex: 1;
+      min-width: 0;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .download-clip {
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #24272d;
+      color: white;
+      border: 1px solid #343840;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .download-clip:hover {
+      background: #30343b;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #171a1f;
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .action-btn:hover {
+      background: #20242a;
+    }
+
+    /* CONTENT */
+
+    .content-section {
+      max-width: 900px;
+      margin: 0 auto 75px;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-heading h2 {
+      font-size: 32px;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .step {
+      padding: 22px;
+      border-radius: 15px;
+      background: #111317;
+      border: 1px solid var(--border);
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: #24272d;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    .step h3 {
+      margin-bottom: 7px;
+      font-size: 17px;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .info-card {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: #111317;
+    }
+
+    .info-card h3 {
+      margin-bottom: 9px;
+    }
+
+    .info-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* FAQ */
+
+    .faq {
+      display: grid;
+      gap: 10px;
+    }
+
+    details {
+      background: #111317;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 17px 19px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    details p {
+      color: var(--muted);
+      margin-top: 11px;
+      font-size: 14px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: 35px 0;
+      margin-top: 30px;
+      color: #777d87;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      color: #c7cbd1;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 17px;
+      font-size: 13px;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .copyright {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #60656e;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+      .container {
+        width: min(100% - 22px, 1100px);
+      }
+
+      .nav {
+        min-height: 62px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 45px 0 25px;
+      }
+
+      h1 {
+        font-size: 43px;
+        letter-spacing: -2px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .tool-card {
+        padding: 13px;
+        border-radius: 17px;
+        margin-bottom: 55px;
+      }
+
+      .dropzone {
+        min-height: 240px;
+        padding: 25px 12px;
+      }
+
+      .duration-options,
+      .steps,
+      .info-grid,
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .clip {
+        align-items: flex-start;
+      }
+
+      .download-clip {
+        margin-left: auto;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="filmframe">
-  <div class="sprockets" aria-hidden="true">
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+<header>
+  <div class="container nav">
+
+    <a href="/" class="brand">
+      <div class="logo"><span>✂</span></div>
+      <span>SecCut</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="#how">How It Works</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
   </div>
+</header>
 
-  <div class="app">
-    <header>
-      <div class="brand">
-        <img src="favicon.ico" class="logo-img" alt="SecCut Icon">
-        <span class="mark">SEC·CUT</span>
+
+<main>
+
+  <!-- HERO -->
+
+  <section class="hero container">
+
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Free online video splitter
+    </div>
+
+    <h1>Split videos.<br>Keep it simple.</h1>
+
+    <p>
+      Upload a video, choose your clip length, and SecCut will split
+      it into smaller videos ready for short-form content.
+    </p>
+
+  </section>
+
+
+  <!-- VIDEO TOOL -->
+
+  <section class="container">
+
+    <div class="tool-card">
+
+      <div class="tool-title">
+        <h2>Split your video</h2>
+        <p>Choose a video below to get started.</p>
       </div>
-      <div class="byline">Made by Riyaz Chalise</div>
-      <h1>Split Any Video Into Clips</h1>
-      <p>Free online video splitter for TikTok, YouTube Shorts, and Instagram Reels. Upload a video, pick a clip length, and get every clip in one download — no signup, no watermark.</p>
-    </header>
 
-    <!-- Upload -->
-    <div class="card">
+
+      <!-- UPLOAD -->
+
       <label class="dropzone" id="dropzone" for="fileInput">
-        <div class="icon">[ SELECT FILE ]</div>
-        <div class="main">Click to choose a video, or drag one here</div>
-        <div class="sub">MP4, MOV, WEBM — up to your server's upload limit</div>
-        <div class="filename hidden" id="filename"></div>
-        <input type="file" id="fileInput" accept="video/*">
-      </label>
-      <div class="duration-row">
-        <span class="duration-label">Clip length</span>
-        <div class="duration-options">
-          <label class="duration-pill">
-            <input type="radio" name="duration" value="15">
-            <span>15s</span>
-          </label>
-          <label class="duration-pill">
-            <input type="radio" name="duration" value="30" checked>
-            <span>30s</span>
-          </label>
+
+        <div>
+
+          <div class="upload-icon">↑</div>
+
+          <h3>Drop your video here</h3>
+
+          <p>
+            or click the button below to choose a video from your device
+          </p>
+
+          <span class="browse-btn">Choose Video</span>
+
+          <div class="formats">
+            Supported: MP4, MOV, WEBM
+          </div>
+
         </div>
+
+      </label>
+
+      <input
+        type="file"
+        id="fileInput"
+        accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm"
+      >
+
+
+      <!-- SELECTED FILE -->
+
+      <div class="file-box" id="fileBox">
+
+        <div class="file-icon">🎬</div>
+
+        <div class="file-info">
+          <div class="file-name" id="fileName">Video</div>
+          <div class="file-size" id="fileSize">0 MB</div>
+        </div>
+
+        <button class="remove-file" id="removeFile" type="button">
+          ×
+        </button>
+
       </div>
-      <div class="actions">
-        <button class="btn-primary" id="processBtn" disabled>Split into clips</button>
+
+
+      <!-- OPTIONS -->
+
+      <div class="options">
+
+        <div class="options-title">
+          How long should each clip be?
+        </div>
+
+        <div class="duration-options">
+
+          <div class="duration-option">
+
+            <input
+              type="radio"
+              id="15sec"
+              name="duration"
+              value="15"
+              checked
+            >
+
+            <label class="duration-label" for="15sec">
+              <strong>15 seconds</strong>
+              <span>Short, fast clips</span>
+            </label>
+
+          </div>
+
+
+          <div class="duration-option">
+
+            <input
+              type="radio"
+              id="30sec"
+              name="duration"
+              value="30"
+            >
+
+            <label class="duration-label" for="30sec">
+              <strong>30 seconds</strong>
+              <span>Longer short-form clips</span>
+            </label>
+
+          </div>
+
+        </div>
+
       </div>
+
+
+      <!-- PROCESS -->
+
+      <button
+        class="process-btn"
+        id="processBtn"
+        type="button"
+        disabled
+      >
+        Split My Video
+      </button>
+
+
+      <!-- STATUS -->
+
+      <div class="status" id="status"></div>
+
+
+      <!-- RESULTS -->
+
+      <div class="results" id="results">
+
+        <h3>Your clips</h3>
+
+        <div class="clip-list" id="clipList"></div>
+
+        <div class="actions">
+
+          <button
+            class="action-btn"
+            id="zipBtn"
+            type="button"
+          >
+            Download ZIP
+          </button>
+
+          <button
+            class="action-btn"
+            id="sequentialBtn"
+            type="button"
+          >
+            Download All
+          </button>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- Processing -->
-    <div class="card hidden" id="processingCard">
-      <div class="status-row">
-        <div class="spinner"></div>
-        <span class="status-text" id="processingText">Uploading and splitting…</span>
-        <span class="timecode" id="processingTimecode">00:00</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </section>
+
+
+  <!-- HOW IT WORKS -->
+
+  <section class="content-section container" id="how">
+
+    <div class="section-heading">
+      <h2>How SecCut works</h2>
+      <p>Splitting a video takes just a few simple steps.</p>
     </div>
 
-    <!-- Results -->
-    <div class="card hidden" id="resultsCard">
-      <div class="results-header">
-        <h2>Clips ready</h2>
-        <span class="count" id="clipCount">0 files</span>
+
+    <div class="steps">
+
+      <div class="step">
+
+        <div class="step-number">1</div>
+
+        <h3>Choose a video</h3>
+
+        <p>
+          Upload an MP4, MOV, or WEBM video from your computer or
+          mobile device.
+        </p>
+
       </div>
-      <ul class="clip-list" id="clipList"></ul>
-      <div class="actions">
-        <button class="btn-primary" id="zipBtn">Download all as .zip</button>
-        <button class="btn-ghost" id="sequentialBtn">Download one by one</button>
+
+
+      <div class="step">
+
+        <div class="step-number">2</div>
+
+        <h3>Select clip length</h3>
+
+        <p>
+          Choose between 15-second and 30-second clips depending on
+          how you want to divide your video.
+        </p>
+
       </div>
+
+
+      <div class="step">
+
+        <div class="step-number">3</div>
+
+        <h3>Download your clips</h3>
+
+        <p>
+          SecCut processes the video and gives you individual clips
+          that you can download.
+        </p>
+
+      </div>
+
     </div>
 
-    <footer>
-      <p>Clips are generated server-side and streamed to your browser for download.</p>
-    </footer>
+  </section>
+
+
+  <!-- FEATURES -->
+
+  <section class="content-section container" id="features">
+
+    <div class="section-heading">
+      <h2>Why use SecCut?</h2>
+      <p>A straightforward tool for turning longer videos into smaller clips.</p>
+    </div>
+
+
+    <div class="info-grid">
+
+      <div class="info-card">
+
+        <h3>Simple interface</h3>
+
+        <p>
+          You do not need complicated video-editing software.
+          Upload your file, select a duration, and start processing.
+        </p>
+
+      </div>
+
+
+      <div class="info-card">
+
+        <h3>Made for short clips</h3>
+
+        <p>
+          SecCut is useful when you need to divide longer videos
+          into short sections for social-media content.
+        </p>
+
+      </div>
+
+
+      <div class="info-card">
+
+        <h3>Multiple formats</h3>
+
+        <p>
+          The tool accepts common video formats including MP4,
+          MOV, and WEBM.
+        </p>
+
+      </div>
+
+
+      <div class="info-card">
+
+        <h3>Download your results</h3>
+
+        <p>
+          After processing, you can download clips individually
+          or package the generated clips into a ZIP file.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- FAQ -->
+
+  <section class="content-section container" id="faq">
+
+    <div class="section-heading">
+      <h2>Frequently asked questions</h2>
+      <p>Some common questions about SecCut.</p>
+    </div>
+
+
+    <div class="faq">
+
+      <details>
+        <summary>What is SecCut?</summary>
+        <p>
+          SecCut is an online video splitting tool designed to divide
+          a video into smaller clips based on a selected duration.
+        </p>
+      </details>
+
+
+      <details>
+        <summary>What video formats are supported?</summary>
+        <p>
+          SecCut currently supports MP4, MOV, and WEBM files.
+        </p>
+      </details>
+
+
+      <details>
+        <summary>What clip lengths can I choose?</summary>
+        <p>
+          You can currently choose 15-second or 30-second clips.
+        </p>
+      </details>
+
+
+      <details>
+        <summary>Can I download individual clips?</summary>
+        <p>
+          Yes. Once processing is complete, each generated clip can
+          be downloaded individually.
+        </p>
+      </details>
+
+
+      <details>
+        <summary>Can I download all clips together?</summary>
+        <p>
+          Yes. SecCut provides a ZIP download option so the generated
+          clips can be collected into one file.
+        </p>
+      </details>
+
+
+      <details>
+        <summary>Do I need video-editing software?</summary>
+        <p>
+          No. SecCut is designed to handle the basic splitting process
+          without requiring desktop video-editing software.
+        </p>
+      </details>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+  <div class="container">
+
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        ✂ SecCut
+      </div>
+
+      <div class="footer-links">
+        <a href="/about.html">About</a>
+        <a href="/how-to-split-video.html">How It Works</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+
+    </div>
+
+    <div class="copyright">
+      © 2026 SecCut. Built by Riyaz Chalise.
+    </div>
+
   </div>
 
-  <div class="sprockets" aria-hidden="true">
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-  </div>
-</div>
+</footer>
+
 
 <script>
-const dropzone      = document.getElementById('dropzone');
-const fileInput      = document.getElementById('fileInput');
-const filenameEl     = document.getElementById('filename');
-const processBtn     = document.getElementById('processBtn');
 
-const processingCard = document.getElementById('processingCard');
-const processingText = document.getElementById('processingText');
-const processingTC    = document.getElementById('processingTimecode');
-const progressFill    = document.getElementById('progressFill');
+  const fileInput = document.getElementById("fileInput");
+  const dropzone = document.getElementById("dropzone");
 
-const resultsCard    = document.getElementById('resultsCard');
-const clipList        = document.getElementById('clipList');
-const clipCount       = document.getElementById('clipCount');
-const zipBtn          = document.getElementById('zipBtn');
-const sequentialBtn   = document.getElementById('sequentialBtn');
+  const fileBox = document.getElementById("fileBox");
+  const fileName = document.getElementById("fileName");
+  const fileSize = document.getElementById("fileSize");
 
-let selectedFile = null;
-let clips = []; 
+  const removeFile = document.getElementById("removeFile");
+  const processBtn = document.getElementById("processBtn");
 
-// ---- File selection ----
-fileInput.addEventListener('change', () => {
-  if (fileInput.files.length) {
-    selectedFile = fileInput.files[0];
-    filenameEl.textContent = selectedFile.name;
-    filenameEl.classList.remove('hidden');
-    processBtn.disabled = false;
-  }
-});
+  const statusBox = document.getElementById("status");
 
-['dragover','dragleave','drop'].forEach(evt => {
-  dropzone.addEventListener(evt, e => {
-    e.preventDefault();
-    dropzone.classList.toggle('drag', evt === 'dragover');
-    if (evt === 'drop' && e.dataTransfer.files.length) {
-      fileInput.files = e.dataTransfer.files;
-      fileInput.dispatchEvent(new Event('change'));
-    }
-  });
-});
+  const results = document.getElementById("results");
+  const clipList = document.getElementById("clipList");
 
-// ---- Kick off processing ----
-processBtn.addEventListener('click', processVideo);
+  const zipBtn = document.getElementById("zipBtn");
+  const sequentialBtn = document.getElementById("sequentialBtn");
 
-async function processVideo() {
-  if (!selectedFile) return;
+  let selectedFile = null;
+  let generatedClips = [];
 
-  resultsCard.classList.add('hidden');
-  processingCard.classList.remove('hidden');
-  processBtn.disabled = true;
-  setProgress(0, 'Uploading and splitting…');
 
-  const startTime = Date.now();
-  const tick = setInterval(() => {
-    const secs = Math.floor((Date.now() - startTime) / 1000);
-    processingTC.textContent = String(Math.floor(secs / 60)).padStart(2,'0') + ':' + String(secs % 60).padStart(2,'0');
-  }, 1000);
+  /* FILE SIZE */
 
-  try {
-    const duration = document.querySelector('input[name="duration"]:checked').value;
+  function formatFileSize(bytes) {
 
-    const formData = new FormData();
-    formData.append('video', selectedFile);
-    formData.append('duration', duration);
-
-    // Dynamic Server Endpoint Call
-    const res = await fetch('/api/split', { method: 'POST', body: formData });
-    if (!res.ok) throw new Error('Server returned ' + res.status);
-    const data = await res.json();
-
-    clips = data.clips || [];
-    setProgress(100, 'Done');
-    renderClips(clips);
-
-    processingCard.classList.add('hidden');
-    resultsCard.classList.remove('hidden');
-  } catch (err) {
-    processingText.textContent = 'Something went wrong: ' + err.message;
-    processingText.style.color = 'var(--red)';
-  } finally {
-    clearInterval(tick);
-    processBtn.disabled = false;
-  }
-}
-
-function setProgress(pct, label) {
-  progressFill.style.width = pct + '%';
-  processingText.textContent = label;
-}
-
-// ---- Render clip list ----
-function renderClips(list) {
-  clipList.innerHTML = '';
-  clipCount.textContent = list.length + (list.length === 1 ? ' file' : ' files');
-
-  list.forEach((clip, i) => {
-    const li = document.createElement('li');
-    li.className = 'clip';
-    li.id = 'clip-row-' + i;
-    li.innerHTML = `
-      <span class="idx">${String(i + 1).padStart(2,'0')}</span>
-      <span class="name">${clip.name}</span>
-      <span class="range">${clip.start || ''}–${clip.end || ''}</span>
-      <span class="state pending" id="clip-state-${i}">pending</span>
-    `;
-    clipList.appendChild(li);
-  });
-}
-
-function setClipState(i, state) {
-  const row = document.getElementById('clip-row-' + i);
-  const stateEl = document.getElementById('clip-state-' + i);
-  if (!row || !stateEl) return;
-  row.classList.remove('active','done');
-  stateEl.classList.remove('active','done','pending');
-  if (state === 'active') { row.classList.add('active'); stateEl.classList.add('active'); stateEl.textContent = 'downloading'; }
-  if (state === 'done')   { row.classList.add('done');   stateEl.classList.add('done');   stateEl.textContent = 'done'; }
-}
-
-// ---- Option A: sequential auto-download ----
-sequentialBtn.addEventListener('click', () => downloadSequentially(clips));
-
-async function downloadSequentially(list) {
-  sequentialBtn.disabled = true;
-  zipBtn.disabled = true;
-
-  for (let i = 0; i < list.length; i++) {
-    setClipState(i, 'active');
-    await triggerDownload(list[i].url, list[i].name);
-    setClipState(i, 'done');
-    await new Promise(r => setTimeout(r, 400));
-  }
-
-  sequentialBtn.disabled = false;
-  zipBtn.disabled = false;
-}
-
-function triggerDownload(url, filename) {
-  return new Promise((resolve) => {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(resolve, 50);
-  });
-}
-
-// ---- Option B: bundle into a single .zip with JSZip ----
-zipBtn.addEventListener('click', () => downloadAsZip(clips));
-
-async function downloadAsZip(list) {
-  if (!list.length) return;
-  zipBtn.disabled = true;
-  sequentialBtn.disabled = true;
-  const originalLabel = zipBtn.textContent;
-
-  try {
-    const zip = new JSZip();
-
-    for (let i = 0; i < list.length; i++) {
-      setClipState(i, 'active');
-      zipBtn.textContent = `Zipping ${i + 1}/${list.length}…`;
-
-      const res = await fetch(list[i].url);
-      if (!res.ok) throw new Error(`Failed to fetch ${list[i].name}`);
-      const blob = await res.blob();
-      zip.file(list[i].name, blob);
-
-      setClipState(i, 'done');
+    if (bytes < 1024 * 1024) {
+      return (bytes / 1024).toFixed(1) + " KB";
     }
 
-    zipBtn.textContent = 'Compressing…';
-    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
 
-    const url = URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'seccut_clips.zip';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  } catch (err) {
-    alert('Could not build zip: ' + err.message);
-  } finally {
-    zipBtn.textContent = originalLabel;
-    zipBtn.disabled = false;
+  }
+
+
+  /* SELECT FILE */
+
+  function handleFile(file) {
+
+    if (!file) return;
+
+    const allowed = [
+      "video/mp4",
+      "video/quicktime",
+      "video/webm"
+    ];
+
+    const extension = file.name.split(".").pop().toLowerCase();
+
+    if (!allowed.includes(file.type) &&
+        !["mp4", "mov", "webm"].includes(extension)) {
+
+      showStatus(
+        "Please choose an MP4, MOV, or WEBM video.",
+        true
+      );
+
+      return;
+    }
+
+    selectedFile = file;
+
+    fileName.textContent = file.name;
+    fileSize.textContent = formatFileSize(file.size);
+
+    fileBox.classList.add("show");
+
+    processBtn.disabled = false;
+
+    results.classList.remove("show");
+
+    statusBox.classList.remove("show");
+
+  }
+
+
+  fileInput.addEventListener("change", function () {
+
+    if (this.files.length > 0) {
+      handleFile(this.files[0]);
+    }
+
+  });
+
+
+  /* DRAG & DROP */
+
+  dropzone.addEventListener("dragover", function (event) {
+
+    event.preventDefault();
+
+    dropzone.classList.add("dragover");
+
+  });
+
+
+  dropzone.addEventListener("dragleave", function () {
+
+    dropzone.classList.remove("dragover");
+
+  });
+
+
+  dropzone.addEventListener("drop", function (event) {
+
+    event.preventDefault();
+
+    dropzone.classList.remove("dragover");
+
+    const file = event.dataTransfer.files[0];
+
+    handleFile(file);
+
+  });
+
+
+  /* REMOVE */
+
+  removeFile.addEventListener("click", function (event) {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    selectedFile = null;
+
+    fileInput.value = "";
+
+    fileBox.classList.remove("show");
+
+    processBtn.disabled = true;
+
+    results.classList.remove("show");
+
+    statusBox.classList.remove("show");
+
+  });
+
+
+  /* STATUS */
+
+  function showStatus(message, error = false) {
+
+    statusBox.innerHTML = error
+      ? "⚠️ " + message
+      : '<span class="spinner"></span>' + message;
+
+    statusBox.classList.add("show");
+
+  }
+
+
+  /* PROCESS VIDEO */
+
+  processBtn.addEventListener("click", async function () {
+
+    if (!selectedFile) return;
+
+    const duration = document.querySelector(
+      'input[name="duration"]:checked'
+    ).value;
+
+    processBtn.disabled = true;
+
+    showStatus(
+      "Uploading and splitting your video. Please wait..."
+    );
+
+    results.classList.remove("show");
+
+    clipList.innerHTML = "";
+
+    generatedClips = [];
+
+    try {
+
+      const formData = new FormData();
+
+      formData.append("video", selectedFile);
+      formData.append("duration", duration);
+
+      const response = await fetch("/api/split", {
+        method: "POST",
+        body: formData
+      });
+
+
+      if (!response.ok) {
+
+        let message = "Something went wrong while processing your video.";
+
+        try {
+
+          const data = await response.json();
+
+          if (data.error) {
+            message = data.error;
+          }
+
+        } catch (_) {}
+
+        throw new Error(message);
+
+      }
+
+
+      const data = await response.json();
+
+
+      if (!data.clips || !Array.isArray(data.clips)) {
+        throw new Error("No clips were returned by the server.");
+      }
+
+
+      generatedClips = data.clips;
+
+      renderResults(generatedClips);
+
+      statusBox.innerHTML =
+        "✓ Your video has been split successfully.";
+
+      results.classList.add("show");
+
+    } catch (error) {
+
+      console.error(error);
+
+      statusBox.innerHTML =
+        "⚠️ " + error.message;
+
+    } finally {
+
+      processBtn.disabled = false;
+
+    }
+
+  });
+
+
+  /* RENDER RESULTS */
+
+  function renderResults(clips) {
+
+    clipList.innerHTML = "";
+
+    clips.forEach((clip, index) => {
+
+      const item = document.createElement("div");
+
+      item.className = "clip";
+
+      const number = document.createElement("div");
+
+      number.className = "clip-number";
+
+      number.textContent = index + 1;
+
+      const name = document.createElement("div");
+
+      name.className = "clip-name";
+
+      name.textContent =
+        clip.name ||
+        clip.filename ||
+        `Clip ${index + 1}`;
+
+      const button = document.createElement("button");
+
+      button.className = "download-clip";
+
+      button.textContent = "Download";
+
+      button.addEventListener("click", function () {
+
+        downloadClip(clip);
+
+      });
+
+      item.appendChild(number);
+      item.appendChild(name);
+      item.appendChild(button);
+
+      clipList.appendChild(item);
+
+    });
+
+  }
+
+
+  /* DOWNLOAD SINGLE */
+
+  function downloadClip(clip) {
+
+    const url =
+      clip.url ||
+      clip.download_url ||
+      clip.path;
+
+    if (!url) {
+
+      alert("Download link is not available.");
+
+      return;
+
+    }
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+      clip.name ||
+      clip.filename ||
+      "seccut-clip.mp4";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+  }
+
+
+  /* ZIP */
+
+  zipBtn.addEventListener("click", async function () {
+
+    if (!generatedClips.length) return;
+
+    zipBtn.disabled = true;
+
+    zipBtn.textContent = "Creating ZIP...";
+
+    try {
+
+      const zip = new JSZip();
+
+      for (let i = 0; i < generatedClips.length; i++) {
+
+        const clip = generatedClips[i];
+
+        const url =
+          clip.url ||
+          clip.download_url ||
+          clip.path;
+
+        if (!url) continue;
+
+        const response = await fetch(url);
+
+        if (!response.ok) continue;
+
+        const blob = await response.blob();
+
+        const name =
+          clip.name ||
+          clip.filename ||
+          `clip-${i + 1}.mp4`;
+
+        zip.file(name, blob);
+
+      }
+
+
+      const zipBlob = await zip.generateAsync({
+        type: "blob"
+      });
+
+
+      const url = URL.createObjectURL(zipBlob);
+
+      const link = document.createElement("a");
+
+      link.href = url;
+
+      link.download = "seccut-clips.zip";
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+      URL.revokeObjectURL(url);
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Could not create the ZIP file.");
+
+    } finally {
+
+      zipBtn.disabled = false;
+
+      zipBtn.textContent = "Download ZIP";
+
+    }
+
+  });
+
+
+  /* DOWNLOAD ALL */
+
+  sequentialBtn.addEventListener("click", async function () {
+
+    if (!generatedClips.length) return;
+
+    sequentialBtn.disabled = true;
+
+    sequentialBtn.textContent = "Downloading...";
+
+    for (const clip of generatedClips) {
+
+      downloadClip(clip);
+
+      await new Promise(resolve =>
+        setTimeout(resolve, 700)
+      );
+
+    }
+
     sequentialBtn.disabled = false;
+
+    sequentialBtn.textContent = "Download All";
+
+  });
+
+
+  /* SERVICE WORKER */
+
+  if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", function () {
+
+      navigator.serviceWorker.register("/sw.js")
+        .then(() => {
+          console.log("SecCut Service Worker registered.");
+        })
+        .catch(error => {
+          console.log(
+            "Service Worker registration failed:",
+            error
+          );
+        });
+
+    });
+
   }
-}
+
 </script>
 
 </body>
