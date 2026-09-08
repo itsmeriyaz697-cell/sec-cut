@@ -1,41 +1,61 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- PWA -->
   <meta name="theme-color" content="#0a0b0d">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="SecCut">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
   <title>SecCut – Free Online Video Splitter</title>
 
-  <meta name="description"
-        content="SecCut is a simple free online video splitter. Upload a video, choose 15 or 30 second clips, and download your split videos.">
-  <meta name="keywords"
-        content="video splitter, split video online, free video cutter, TikTok video splitter, YouTube Shorts, Instagram Reels">
+  <meta
+    name="description"
+    content="SecCut is a simple free online video splitter. Upload a video, choose 15 or 30 second clips, and download your split videos."
+  >
+
+  <meta
+    name="keywords"
+    content="video splitter, split video online, free video cutter, TikTok video splitter, YouTube Shorts, Instagram Reels"
+  >
+
   <meta name="robots" content="index, follow">
   <meta name="author" content="Riyaz Chalise">
 
   <link rel="canonical" href="https://sec-cut.onrender.com/">
+
+  <!-- PWA Manifest -->
   <link rel="manifest" href="/manifest.json">
 
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+
+  <!-- Open Graph -->
   <meta property="og:title" content="SecCut – Free Online Video Splitter">
-  <meta property="og:description"
-        content="Split your videos into short clips quickly and easily with SecCut.">
+  <meta
+    property="og:description"
+    content="Split videos into short clips quickly and easily with SecCut."
+  >
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sec-cut.onrender.com/">
 
-  <link rel="icon" href="/favicon.ico">
-
   <!-- Google AdSense -->
-  <script async
+  <script
+    async
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3176406028641137"
-    crossorigin="anonymous"></script>
+    crossorigin="anonymous">
+  </script>
 
   <!-- JSZip -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+  </script>
 
   <style>
     * {
@@ -51,7 +71,6 @@
       --border: #292d34;
       --text: #f4f5f7;
       --muted: #9da3ad;
-      --accent: #ffffff;
       --success: #55d98a;
       --danger: #ff6868;
     }
@@ -63,7 +82,12 @@
     body {
       font-family: Inter, Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(circle at 50% -10%, #22252b 0%, #0b0c0f 38%, #08090b 70%);
+        radial-gradient(
+          circle at 50% -10%,
+          #22252b 0%,
+          #0b0c0f 38%,
+          #08090b 70%
+        );
       color: var(--text);
       line-height: 1.6;
       min-height: 100vh;
@@ -84,7 +108,9 @@
       margin: auto;
     }
 
-    /* HEADER */
+    /* =========================
+       HEADER
+    ========================= */
 
     header {
       border-bottom: 1px solid rgba(255,255,255,.07);
@@ -134,11 +160,17 @@
       font-size: 14px;
     }
 
+    .nav-links a {
+      transition: .2s ease;
+    }
+
     .nav-links a:hover {
       color: white;
     }
 
-    /* HERO */
+    /* =========================
+       HERO
+    ========================= */
 
     .hero {
       text-align: center;
@@ -179,15 +211,21 @@
       font-size: 17px;
     }
 
-    /* TOOL */
+    /* =========================
+       VIDEO TOOL
+    ========================= */
 
     .tool-card {
       max-width: 850px;
-      margin: 25px auto 70px;
+      margin: 25px auto 80px;
       padding: 22px;
       border-radius: 22px;
       background:
-        linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.055),
+          rgba(255,255,255,.018)
+        );
       border: 1px solid var(--border);
       box-shadow:
         0 25px 70px rgba(0,0,0,.35),
@@ -208,7 +246,9 @@
       font-size: 14px;
     }
 
-    /* DROPZONE */
+    /* =========================
+       DROPZONE
+    ========================= */
 
     .dropzone {
       border: 2px dashed #383d46;
@@ -274,7 +314,9 @@
       display: none;
     }
 
-    /* FILE SELECTED */
+    /* =========================
+       SELECTED FILE
+    ========================= */
 
     .file-box {
       display: none;
@@ -331,7 +373,9 @@
       color: var(--danger);
     }
 
-    /* OPTIONS */
+    /* =========================
+       OPTIONS
+    ========================= */
 
     .options {
       margin-top: 22px;
@@ -381,10 +425,13 @@
     .duration-option input:checked + .duration-label {
       border-color: #aeb4bd;
       background: #1c1f25;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.08);
     }
 
-    /* PROCESS BUTTON */
+    /* =========================
+       PROCESS BUTTON
+    ========================= */
 
     .process-btn {
       width: 100%;
@@ -410,7 +457,9 @@
       transform: none;
     }
 
-    /* STATUS */
+    /* =========================
+       STATUS
+    ========================= */
 
     .status {
       display: none;
@@ -441,10 +490,14 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
-    /* RESULTS */
+    /* =========================
+       RESULTS
+    ========================= */
 
     .results {
       display: none;
@@ -530,110 +583,14 @@
       background: #20242a;
     }
 
-    /* CONTENT */
-
-    .content-section {
-      max-width: 900px;
-      margin: 0 auto 75px;
+    .action-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
     }
 
-    .section-heading {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .section-heading h2 {
-      font-size: 32px;
-      letter-spacing: -1px;
-      margin-bottom: 8px;
-    }
-
-    .section-heading p {
-      color: var(--muted);
-    }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-    }
-
-    .step {
-      padding: 22px;
-      border-radius: 15px;
-      background: #111317;
-      border: 1px solid var(--border);
-    }
-
-    .step-number {
-      width: 36px;
-      height: 36px;
-      border-radius: 9px;
-      display: grid;
-      place-items: center;
-      background: #24272d;
-      font-weight: 800;
-      margin-bottom: 15px;
-    }
-
-    .step h3 {
-      margin-bottom: 7px;
-      font-size: 17px;
-    }
-
-    .step p {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-
-    .info-card {
-      padding: 24px;
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      background: #111317;
-    }
-
-    .info-card h3 {
-      margin-bottom: 9px;
-    }
-
-    .info-card p {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    /* FAQ */
-
-    .faq {
-      display: grid;
-      gap: 10px;
-    }
-
-    details {
-      background: #111317;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      padding: 17px 19px;
-    }
-
-    summary {
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    details p {
-      color: var(--muted);
-      margin-top: 11px;
-      font-size: 14px;
-    }
-
-    /* FOOTER */
+    /* =========================
+       FOOTER
+    ========================= */
 
     footer {
       border-top: 1px solid rgba(255,255,255,.07);
@@ -661,6 +618,10 @@
       font-size: 13px;
     }
 
+    .footer-links a {
+      transition: .2s ease;
+    }
+
     .footer-links a:hover {
       color: white;
     }
@@ -671,9 +632,12 @@
       color: #60656e;
     }
 
-    /* MOBILE */
+    /* =========================
+       MOBILE
+    ========================= */
 
     @media (max-width: 700px) {
+
       .container {
         width: min(100% - 22px, 1100px);
       }
@@ -711,8 +675,6 @@
       }
 
       .duration-options,
-      .steps,
-      .info-grid,
       .actions {
         grid-template-columns: 1fr;
       }
@@ -735,809 +697,904 @@
 
 <body>
 
-<header>
-  <div class="container nav">
+  <!-- =========================
+       HEADER
+  ========================= -->
 
-    <a href="/" class="brand">
-      <div class="logo"><span>✂</span></div>
-      <span>SecCut</span>
-    </a>
+  <header>
+    <div class="container nav">
 
-    <nav class="nav-links">
-      <a href="#how">How It Works</a>
-      <a href="#features">Features</a>
-      <a href="#faq">FAQ</a>
-    </nav>
+      <a href="/" class="brand" aria-label="SecCut Home">
+        <div class="logo">
+          <span>✂</span>
+        </div>
 
-  </div>
-</header>
+        <span>SecCut</span>
+      </a>
 
+      <nav class="nav-links" aria-label="Main navigation">
 
-<main>
+        <a href="/how-to-split-video.html">
+          How It Works
+        </a>
 
-  <!-- HERO -->
+        <a href="/faq.html">
+          FAQ
+        </a>
 
-  <section class="hero container">
+        <a href="/about.html">
+          About
+        </a>
 
-    <div class="badge">
-      <span class="badge-dot"></span>
-      Free online video splitter
+      </nav>
+
     </div>
-
-    <h1>Split videos.<br>Keep it simple.</h1>
-
-    <p>
-      Upload a video, choose your clip length, and SecCut will split
-      it into smaller videos ready for short-form content.
-    </p>
-
-  </section>
+  </header>
 
 
-  <!-- VIDEO TOOL -->
+  <main>
 
-  <section class="container">
+    <!-- =========================
+         HERO
+    ========================= -->
 
-    <div class="tool-card">
+    <section class="hero container">
 
-      <div class="tool-title">
-        <h2>Split your video</h2>
-        <p>Choose a video below to get started.</p>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Free online video splitter
       </div>
 
+      <h1>
+        Split videos.<br>
+        Keep it simple.
+      </h1>
 
-      <!-- UPLOAD -->
+      <p>
+        Upload a video, choose your clip length, and SecCut will split
+        it into smaller videos ready for short-form content.
+      </p>
 
-      <label class="dropzone" id="dropzone" for="fileInput">
+    </section>
 
-        <div>
 
-          <div class="upload-icon">↑</div>
+    <!-- =========================
+         VIDEO SPLITTER
+    ========================= -->
 
-          <h3>Drop your video here</h3>
+    <section class="container">
+
+      <div class="tool-card">
+
+        <div class="tool-title">
+
+          <h2>
+            Split your video
+          </h2>
 
           <p>
-            or click the button below to choose a video from your device
+            Choose a video below to get started.
           </p>
 
-          <span class="browse-btn">Choose Video</span>
+        </div>
 
-          <div class="formats">
-            Supported: MP4, MOV, WEBM
+
+        <!-- DROPZONE -->
+
+        <label
+          class="dropzone"
+          id="dropzone"
+          for="fileInput"
+        >
+
+          <div>
+
+            <div class="upload-icon">
+              ↑
+            </div>
+
+            <h3>
+              Drop your video here
+            </h3>
+
+            <p>
+              or click the button below to choose a video
+              from your device
+            </p>
+
+            <span class="browse-btn">
+              Choose Video
+            </span>
+
+            <div class="formats">
+              Supported: MP4, MOV, WEBM
+            </div>
+
+          </div>
+
+        </label>
+
+
+        <input
+          type="file"
+          id="fileInput"
+          accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm"
+        >
+
+
+        <!-- SELECTED FILE -->
+
+        <div
+          class="file-box"
+          id="fileBox"
+        >
+
+          <div class="file-icon">
+            🎬
+          </div>
+
+          <div class="file-info">
+
+            <div
+              class="file-name"
+              id="fileName"
+            >
+              Video
+            </div>
+
+            <div
+              class="file-size"
+              id="fileSize"
+            >
+              0 MB
+            </div>
+
+          </div>
+
+          <button
+            class="remove-file"
+            id="removeFile"
+            type="button"
+            aria-label="Remove selected video"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <!-- OPTIONS -->
+
+        <div class="options">
+
+          <div class="options-title">
+            How long should each clip be?
+          </div>
+
+          <div class="duration-options">
+
+            <div class="duration-option">
+
+              <input
+                type="radio"
+                id="15sec"
+                name="duration"
+                value="15"
+                checked
+              >
+
+              <label
+                class="duration-label"
+                for="15sec"
+              >
+
+                <strong>
+                  15 seconds
+                </strong>
+
+                <span>
+                  Short, fast clips
+                </span>
+
+              </label>
+
+            </div>
+
+
+            <div class="duration-option">
+
+              <input
+                type="radio"
+                id="30sec"
+                name="duration"
+                value="30"
+              >
+
+              <label
+                class="duration-label"
+                for="30sec"
+              >
+
+                <strong>
+                  30 seconds
+                </strong>
+
+                <span>
+                  Longer short-form clips
+                </span>
+
+              </label>
+
+            </div>
+
           </div>
 
         </div>
 
-      </label>
 
-      <input
-        type="file"
-        id="fileInput"
-        accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm"
-      >
+        <!-- PROCESS BUTTON -->
 
-
-      <!-- SELECTED FILE -->
-
-      <div class="file-box" id="fileBox">
-
-        <div class="file-icon">🎬</div>
-
-        <div class="file-info">
-          <div class="file-name" id="fileName">Video</div>
-          <div class="file-size" id="fileSize">0 MB</div>
-        </div>
-
-        <button class="remove-file" id="removeFile" type="button">
-          ×
+        <button
+          class="process-btn"
+          id="processBtn"
+          type="button"
+          disabled
+        >
+          Split My Video
         </button>
 
-      </div>
+
+        <!-- STATUS -->
+
+        <div
+          class="status"
+          id="status"
+          role="status"
+          aria-live="polite"
+        ></div>
 
 
-      <!-- OPTIONS -->
+        <!-- RESULTS -->
 
-      <div class="options">
+        <div
+          class="results"
+          id="results"
+        >
 
-        <div class="options-title">
-          How long should each clip be?
-        </div>
+          <h3>
+            Your clips
+          </h3>
 
-        <div class="duration-options">
+          <div
+            class="clip-list"
+            id="clipList"
+          ></div>
 
-          <div class="duration-option">
+          <div class="actions">
 
-            <input
-              type="radio"
-              id="15sec"
-              name="duration"
-              value="15"
-              checked
+            <button
+              class="action-btn"
+              id="zipBtn"
+              type="button"
             >
+              Download ZIP
+            </button>
 
-            <label class="duration-label" for="15sec">
-              <strong>15 seconds</strong>
-              <span>Short, fast clips</span>
-            </label>
+            <button
+              class="action-btn"
+              id="sequentialBtn"
+              type="button"
+            >
+              Download All
+            </button>
 
           </div>
 
+        </div>
 
-          <div class="duration-option">
+      </div>
 
-            <input
-              type="radio"
-              id="30sec"
-              name="duration"
-              value="30"
-            >
+    </section>
 
-            <label class="duration-label" for="30sec">
-              <strong>30 seconds</strong>
-              <span>Longer short-form clips</span>
-            </label>
+  </main>
 
-          </div>
+
+  <!-- =========================
+       FOOTER
+  ========================= -->
+
+  <footer>
+
+    <div class="container">
+
+      <div class="footer-inner">
+
+        <div class="footer-brand">
+          ✂ SecCut
+        </div>
+
+        <div class="footer-links">
+
+          <a href="/about.html">
+            About
+          </a>
+
+          <a href="/how-to-split-video.html">
+            How It Works
+          </a>
+
+          <a href="/faq.html">
+            FAQ
+          </a>
+
+          <a href="/privacy.html">
+            Privacy
+          </a>
+
+          <a href="/terms.html">
+            Terms
+          </a>
+
+          <a href="/contact.html">
+            Contact
+          </a>
 
         </div>
 
       </div>
 
-
-      <!-- PROCESS -->
-
-      <button
-        class="process-btn"
-        id="processBtn"
-        type="button"
-        disabled
-      >
-        Split My Video
-      </button>
-
-
-      <!-- STATUS -->
-
-      <div class="status" id="status"></div>
-
-
-      <!-- RESULTS -->
-
-      <div class="results" id="results">
-
-        <h3>Your clips</h3>
-
-        <div class="clip-list" id="clipList"></div>
-
-        <div class="actions">
-
-          <button
-            class="action-btn"
-            id="zipBtn"
-            type="button"
-          >
-            Download ZIP
-          </button>
-
-          <button
-            class="action-btn"
-            id="sequentialBtn"
-            type="button"
-          >
-            Download All
-          </button>
-
-        </div>
-
+      <div class="copyright">
+        © 2026 SecCut. Built by Riyaz Chalise.
       </div>
 
     </div>
 
-  </section>
+  </footer>
 
 
-  <!-- HOW IT WORKS -->
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
 
-  <section class="content-section container" id="how">
+  <script>
 
-    <div class="section-heading">
-      <h2>How SecCut works</h2>
-      <p>Splitting a video takes just a few simple steps.</p>
-    </div>
+    const fileInput =
+      document.getElementById("fileInput");
 
+    const dropzone =
+      document.getElementById("dropzone");
 
-    <div class="steps">
+    const fileBox =
+      document.getElementById("fileBox");
 
-      <div class="step">
+    const fileName =
+      document.getElementById("fileName");
 
-        <div class="step-number">1</div>
+    const fileSize =
+      document.getElementById("fileSize");
 
-        <h3>Choose a video</h3>
+    const removeFile =
+      document.getElementById("removeFile");
 
-        <p>
-          Upload an MP4, MOV, or WEBM video from your computer or
-          mobile device.
-        </p>
+    const processBtn =
+      document.getElementById("processBtn");
 
-      </div>
+    const statusBox =
+      document.getElementById("status");
 
+    const results =
+      document.getElementById("results");
 
-      <div class="step">
+    const clipList =
+      document.getElementById("clipList");
 
-        <div class="step-number">2</div>
+    const zipBtn =
+      document.getElementById("zipBtn");
 
-        <h3>Select clip length</h3>
+    const sequentialBtn =
+      document.getElementById("sequentialBtn");
 
-        <p>
-          Choose between 15-second and 30-second clips depending on
-          how you want to divide your video.
-        </p>
 
-      </div>
+    let selectedFile = null;
 
+    let generatedClips = [];
 
-      <div class="step">
 
-        <div class="step-number">3</div>
+    /* =========================
+       FILE SIZE
+    ========================= */
 
-        <h3>Download your clips</h3>
+    function formatFileSize(bytes) {
 
-        <p>
-          SecCut processes the video and gives you individual clips
-          that you can download.
-        </p>
+      if (bytes < 1024 * 1024) {
 
-      </div>
+        return (
+          (bytes / 1024).toFixed(1) +
+          " KB"
+        );
 
-    </div>
+      }
 
-  </section>
-
-
-  <!-- FEATURES -->
-
-  <section class="content-section container" id="features">
-
-    <div class="section-heading">
-      <h2>Why use SecCut?</h2>
-      <p>A straightforward tool for turning longer videos into smaller clips.</p>
-    </div>
-
-
-    <div class="info-grid">
-
-      <div class="info-card">
-
-        <h3>Simple interface</h3>
-
-        <p>
-          You do not need complicated video-editing software.
-          Upload your file, select a duration, and start processing.
-        </p>
-
-      </div>
-
-
-      <div class="info-card">
-
-        <h3>Made for short clips</h3>
-
-        <p>
-          SecCut is useful when you need to divide longer videos
-          into short sections for social-media content.
-        </p>
-
-      </div>
-
-
-      <div class="info-card">
-
-        <h3>Multiple formats</h3>
-
-        <p>
-          The tool accepts common video formats including MP4,
-          MOV, and WEBM.
-        </p>
-
-      </div>
-
-
-      <div class="info-card">
-
-        <h3>Download your results</h3>
-
-        <p>
-          After processing, you can download clips individually
-          or package the generated clips into a ZIP file.
-        </p>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- FAQ -->
-
-  <section class="content-section container" id="faq">
-
-    <div class="section-heading">
-      <h2>Frequently asked questions</h2>
-      <p>Some common questions about SecCut.</p>
-    </div>
-
-
-    <div class="faq">
-
-      <details>
-        <summary>What is SecCut?</summary>
-        <p>
-          SecCut is an online video splitting tool designed to divide
-          a video into smaller clips based on a selected duration.
-        </p>
-      </details>
-
-
-      <details>
-        <summary>What video formats are supported?</summary>
-        <p>
-          SecCut currently supports MP4, MOV, and WEBM files.
-        </p>
-      </details>
-
-
-      <details>
-        <summary>What clip lengths can I choose?</summary>
-        <p>
-          You can currently choose 15-second or 30-second clips.
-        </p>
-      </details>
-
-
-      <details>
-        <summary>Can I download individual clips?</summary>
-        <p>
-          Yes. Once processing is complete, each generated clip can
-          be downloaded individually.
-        </p>
-      </details>
-
-
-      <details>
-        <summary>Can I download all clips together?</summary>
-        <p>
-          Yes. SecCut provides a ZIP download option so the generated
-          clips can be collected into one file.
-        </p>
-      </details>
-
-
-      <details>
-        <summary>Do I need video-editing software?</summary>
-        <p>
-          No. SecCut is designed to handle the basic splitting process
-          without requiring desktop video-editing software.
-        </p>
-      </details>
-
-    </div>
-
-  </section>
-
-</main>
-
-
-<!-- FOOTER -->
-
-<footer>
-
-  <div class="container">
-
-    <div class="footer-inner">
-
-      <div class="footer-brand">
-        ✂ SecCut
-      </div>
-
-      <div class="footer-links">
-        <a href="/about.html">About</a>
-        <a href="/how-to-split-video.html">How It Works</a>
-        <a href="/faq.html">FAQ</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms</a>
-        <a href="/contact.html">Contact</a>
-      </div>
-
-    </div>
-
-    <div class="copyright">
-      © 2026 SecCut. Built by Riyaz Chalise.
-    </div>
-
-  </div>
-
-</footer>
-
-
-<script>
-
-  const fileInput = document.getElementById("fileInput");
-  const dropzone = document.getElementById("dropzone");
-
-  const fileBox = document.getElementById("fileBox");
-  const fileName = document.getElementById("fileName");
-  const fileSize = document.getElementById("fileSize");
-
-  const removeFile = document.getElementById("removeFile");
-  const processBtn = document.getElementById("processBtn");
-
-  const statusBox = document.getElementById("status");
-
-  const results = document.getElementById("results");
-  const clipList = document.getElementById("clipList");
-
-  const zipBtn = document.getElementById("zipBtn");
-  const sequentialBtn = document.getElementById("sequentialBtn");
-
-  let selectedFile = null;
-  let generatedClips = [];
-
-
-  /* FILE SIZE */
-
-  function formatFileSize(bytes) {
-
-    if (bytes < 1024 * 1024) {
-      return (bytes / 1024).toFixed(1) + " KB";
-    }
-
-    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
-
-  }
-
-
-  /* SELECT FILE */
-
-  function handleFile(file) {
-
-    if (!file) return;
-
-    const allowed = [
-      "video/mp4",
-      "video/quicktime",
-      "video/webm"
-    ];
-
-    const extension = file.name.split(".").pop().toLowerCase();
-
-    if (!allowed.includes(file.type) &&
-        !["mp4", "mov", "webm"].includes(extension)) {
-
-      showStatus(
-        "Please choose an MP4, MOV, or WEBM video.",
-        true
+      return (
+        (bytes / (1024 * 1024)).toFixed(2) +
+        " MB"
       );
 
-      return;
     }
 
-    selectedFile = file;
 
-    fileName.textContent = file.name;
-    fileSize.textContent = formatFileSize(file.size);
+    /* =========================
+       STATUS
+    ========================= */
 
-    fileBox.classList.add("show");
+    function showStatus(message, error = false) {
 
-    processBtn.disabled = false;
+      if (error) {
 
-    results.classList.remove("show");
+        statusBox.innerHTML =
+          "⚠️ " + escapeHTML(message);
 
-    statusBox.classList.remove("show");
+      } else {
 
-  }
+        statusBox.innerHTML =
+          '<span class="spinner"></span>' +
+          escapeHTML(message);
 
+      }
 
-  fileInput.addEventListener("change", function () {
+      statusBox.classList.add("show");
 
-    if (this.files.length > 0) {
-      handleFile(this.files[0]);
     }
 
-  });
+
+    /* =========================
+       ESCAPE HTML
+    ========================= */
+
+    function escapeHTML(value) {
+
+      const div =
+        document.createElement("div");
+
+      div.textContent = String(value);
+
+      return div.innerHTML;
+
+    }
 
 
-  /* DRAG & DROP */
+    /* =========================
+       SELECT FILE
+    ========================= */
 
-  dropzone.addEventListener("dragover", function (event) {
+    function handleFile(file) {
 
-    event.preventDefault();
-
-    dropzone.classList.add("dragover");
-
-  });
+      if (!file) return;
 
 
-  dropzone.addEventListener("dragleave", function () {
+      const allowedTypes = [
+        "video/mp4",
+        "video/quicktime",
+        "video/webm"
+      ];
 
-    dropzone.classList.remove("dragover");
-
-  });
-
-
-  dropzone.addEventListener("drop", function (event) {
-
-    event.preventDefault();
-
-    dropzone.classList.remove("dragover");
-
-    const file = event.dataTransfer.files[0];
-
-    handleFile(file);
-
-  });
+      const extension =
+        file.name
+          .split(".")
+          .pop()
+          .toLowerCase();
 
 
-  /* REMOVE */
-
-  removeFile.addEventListener("click", function (event) {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    selectedFile = null;
-
-    fileInput.value = "";
-
-    fileBox.classList.remove("show");
-
-    processBtn.disabled = true;
-
-    results.classList.remove("show");
-
-    statusBox.classList.remove("show");
-
-  });
+      const allowedExtensions = [
+        "mp4",
+        "mov",
+        "webm"
+      ];
 
 
-  /* STATUS */
+      if (
+        !allowedTypes.includes(file.type) &&
+        !allowedExtensions.includes(extension)
+      ) {
 
-  function showStatus(message, error = false) {
+        showStatus(
+          "Please choose an MP4, MOV, or WEBM video.",
+          true
+        );
 
-    statusBox.innerHTML = error
-      ? "⚠️ " + message
-      : '<span class="spinner"></span>' + message;
-
-    statusBox.classList.add("show");
-
-  }
-
-
-  /* PROCESS VIDEO */
-
-  processBtn.addEventListener("click", async function () {
-
-    if (!selectedFile) return;
-
-    const duration = document.querySelector(
-      'input[name="duration"]:checked'
-    ).value;
-
-    processBtn.disabled = true;
-
-    showStatus(
-      "Uploading and splitting your video. Please wait..."
-    );
-
-    results.classList.remove("show");
-
-    clipList.innerHTML = "";
-
-    generatedClips = [];
-
-    try {
-
-      const formData = new FormData();
-
-      formData.append("video", selectedFile);
-      formData.append("duration", duration);
-
-      const response = await fetch("/api/split", {
-        method: "POST",
-        body: formData
-      });
-
-
-      if (!response.ok) {
-
-        let message = "Something went wrong while processing your video.";
-
-        try {
-
-          const data = await response.json();
-
-          if (data.error) {
-            message = data.error;
-          }
-
-        } catch (_) {}
-
-        throw new Error(message);
+        return;
 
       }
 
 
-      const data = await response.json();
+      selectedFile = file;
 
 
-      if (!data.clips || !Array.isArray(data.clips)) {
-        throw new Error("No clips were returned by the server.");
-      }
+      fileName.textContent =
+        file.name;
+
+      fileSize.textContent =
+        formatFileSize(file.size);
 
 
-      generatedClips = data.clips;
-
-      renderResults(generatedClips);
-
-      statusBox.innerHTML =
-        "✓ Your video has been split successfully.";
-
-      results.classList.add("show");
-
-    } catch (error) {
-
-      console.error(error);
-
-      statusBox.innerHTML =
-        "⚠️ " + error.message;
-
-    } finally {
+      fileBox.classList.add("show");
 
       processBtn.disabled = false;
 
-    }
+      results.classList.remove("show");
 
-  });
-
-
-  /* RENDER RESULTS */
-
-  function renderResults(clips) {
-
-    clipList.innerHTML = "";
-
-    clips.forEach((clip, index) => {
-
-      const item = document.createElement("div");
-
-      item.className = "clip";
-
-      const number = document.createElement("div");
-
-      number.className = "clip-number";
-
-      number.textContent = index + 1;
-
-      const name = document.createElement("div");
-
-      name.className = "clip-name";
-
-      name.textContent =
-        clip.name ||
-        clip.filename ||
-        `Clip ${index + 1}`;
-
-      const button = document.createElement("button");
-
-      button.className = "download-clip";
-
-      button.textContent = "Download";
-
-      button.addEventListener("click", function () {
-
-        downloadClip(clip);
-
-      });
-
-      item.appendChild(number);
-      item.appendChild(name);
-      item.appendChild(button);
-
-      clipList.appendChild(item);
-
-    });
-
-  }
-
-
-  /* DOWNLOAD SINGLE */
-
-  function downloadClip(clip) {
-
-    const url =
-      clip.url ||
-      clip.download_url ||
-      clip.path;
-
-    if (!url) {
-
-      alert("Download link is not available.");
-
-      return;
+      statusBox.classList.remove("show");
 
     }
 
-    const link = document.createElement("a");
 
-    link.href = url;
+    /* =========================
+       FILE INPUT
+    ========================= */
 
-    link.download =
-      clip.name ||
-      clip.filename ||
-      "seccut-clip.mp4";
+    fileInput.addEventListener(
+      "change",
+      function () {
 
-    document.body.appendChild(link);
+        if (this.files.length > 0) {
 
-    link.click();
+          handleFile(this.files[0]);
 
-    link.remove();
+        }
 
-  }
+      }
+    );
 
 
-  /* ZIP */
+    /* =========================
+       DRAG OVER
+    ========================= */
 
-  zipBtn.addEventListener("click", async function () {
+    dropzone.addEventListener(
+      "dragover",
+      function (event) {
 
-    if (!generatedClips.length) return;
+        event.preventDefault();
 
-    zipBtn.disabled = true;
+        dropzone.classList.add("dragover");
 
-    zipBtn.textContent = "Creating ZIP...";
+      }
+    );
 
-    try {
 
-      const zip = new JSZip();
+    /* =========================
+       DRAG LEAVE
+    ========================= */
 
-      for (let i = 0; i < generatedClips.length; i++) {
+    dropzone.addEventListener(
+      "dragleave",
+      function () {
 
-        const clip = generatedClips[i];
+        dropzone.classList.remove("dragover");
 
-        const url =
-          clip.url ||
-          clip.download_url ||
-          clip.path;
+      }
+    );
 
-        if (!url) continue;
 
-        const response = await fetch(url);
+    /* =========================
+       DROP
+    ========================= */
 
-        if (!response.ok) continue;
+    dropzone.addEventListener(
+      "drop",
+      function (event) {
 
-        const blob = await response.blob();
+        event.preventDefault();
 
-        const name =
-          clip.name ||
-          clip.filename ||
-          `clip-${i + 1}.mp4`;
+        dropzone.classList.remove("dragover");
 
-        zip.file(name, blob);
+        const file =
+          event.dataTransfer.files[0];
+
+        handleFile(file);
+
+      }
+    );
+
+
+    /* =========================
+       REMOVE FILE
+    ========================= */
+
+    removeFile.addEventListener(
+      "click",
+      function (event) {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        selectedFile = null;
+
+        generatedClips = [];
+
+        fileInput.value = "";
+
+        fileBox.classList.remove("show");
+
+        processBtn.disabled = true;
+
+        results.classList.remove("show");
+
+        clipList.innerHTML = "";
+
+        statusBox.classList.remove("show");
+
+      }
+    );
+
+
+    /* =========================
+       PROCESS VIDEO
+    ========================= */
+
+    processBtn.addEventListener(
+      "click",
+      async function () {
+
+        if (!selectedFile) return;
+
+
+        const duration =
+          document.querySelector(
+            'input[name="duration"]:checked'
+          ).value;
+
+
+        processBtn.disabled = true;
+
+
+        showStatus(
+          "Uploading and splitting your video. Please wait..."
+        );
+
+
+        results.classList.remove("show");
+
+        clipList.innerHTML = "";
+
+        generatedClips = [];
+
+
+        try {
+
+          const formData =
+            new FormData();
+
+
+          formData.append(
+            "video",
+            selectedFile
+          );
+
+
+          formData.append(
+            "duration",
+            duration
+          );
+
+
+          const response =
+            await fetch(
+              "/api/split",
+              {
+                method: "POST",
+                body: formData
+              }
+            );
+
+
+          if (!response.ok) {
+
+            let message =
+              "Something went wrong while processing your video.";
+
+
+            try {
+
+              const data =
+                await response.json();
+
+
+              if (data.error) {
+
+                message =
+                  data.error;
+
+              }
+
+            } catch (_) {}
+
+
+            throw new Error(message);
+
+          }
+
+
+          const data =
+            await response.json();
+
+
+          if (
+            !data.clips ||
+            !Array.isArray(data.clips)
+          ) {
+
+            throw new Error(
+              "No clips were returned by the server."
+            );
+
+          }
+
+
+          generatedClips =
+            data.clips;
+
+
+          renderResults(
+            generatedClips
+          );
+
+
+          statusBox.innerHTML =
+            "✓ Your video has been split successfully.";
+
+
+          statusBox.classList.add("show");
+
+          results.classList.add("show");
+
+
+        } catch (error) {
+
+          console.error(error);
+
+
+          statusBox.innerHTML =
+            "⚠️ " +
+            escapeHTML(
+              error.message ||
+              "Something went wrong."
+            );
+
+
+          statusBox.classList.add("show");
+
+
+        } finally {
+
+          processBtn.disabled = false;
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       RENDER RESULTS
+    ========================= */
+
+    function renderResults(clips) {
+
+      clipList.innerHTML = "";
+
+
+      clips.forEach(
+        function (clip, index) {
+
+          const item =
+            document.createElement("div");
+
+          item.className =
+            "clip";
+
+
+          const number =
+            document.createElement("div");
+
+          number.className =
+            "clip-number";
+
+          number.textContent =
+            index + 1;
+
+
+          const name =
+            document.createElement("div");
+
+          name.className =
+            "clip-name";
+
+          name.textContent =
+            clip.name ||
+            clip.filename ||
+            `Clip ${index + 1}`;
+
+
+          const button =
+            document.createElement("button");
+
+          button.className =
+            "download-clip";
+
+          button.textContent =
+            "Download";
+
+          button.type =
+            "button";
+
+
+          button.addEventListener(
+            "click",
+            function () {
+
+              downloadClip(clip);
+
+            }
+          );
+
+
+          item.appendChild(number);
+
+          item.appendChild(name);
+
+          item.appendChild(button);
+
+          clipList.appendChild(item);
+
+        }
+      );
+
+    }
+
+
+    /* =========================
+       DOWNLOAD SINGLE CLIP
+    ========================= */
+
+    function downloadClip(clip) {
+
+      const url =
+        clip.url ||
+        clip.download_url ||
+        clip.path;
+
+
+      if (!url) {
+
+        alert(
+          "Download link is not available."
+        );
+
+        return;
 
       }
 
 
-      const zipBlob = await zip.generateAsync({
-        type: "blob"
-      });
+      const link =
+        document.createElement("a");
 
 
-      const url = URL.createObjectURL(zipBlob);
+      link.href =
+        url;
 
-      const link = document.createElement("a");
 
-      link.href = url;
+      link.download =
+        clip.name ||
+        clip.filename ||
+        "seccut-clip.mp4";
 
-      link.download = "seccut-clips.zip";
+
+      link.target =
+        "_blank";
+
 
       document.body.appendChild(link);
 
@@ -1545,74 +1602,239 @@
 
       link.remove();
 
-      URL.revokeObjectURL(url);
-
-    } catch (error) {
-
-      console.error(error);
-
-      alert("Could not create the ZIP file.");
-
-    } finally {
-
-      zipBtn.disabled = false;
-
-      zipBtn.textContent = "Download ZIP";
-
     }
 
-  });
+
+    /* =========================
+       DOWNLOAD ZIP
+    ========================= */
+
+    zipBtn.addEventListener(
+      "click",
+      async function () {
+
+        if (!generatedClips.length) return;
 
 
-  /* DOWNLOAD ALL */
+        zipBtn.disabled = true;
 
-  sequentialBtn.addEventListener("click", async function () {
+        zipBtn.textContent =
+          "Creating ZIP...";
 
-    if (!generatedClips.length) return;
 
-    sequentialBtn.disabled = true;
+        try {
 
-    sequentialBtn.textContent = "Downloading...";
+          const zip =
+            new JSZip();
 
-    for (const clip of generatedClips) {
 
-      downloadClip(clip);
+          let addedFiles = 0;
 
-      await new Promise(resolve =>
-        setTimeout(resolve, 700)
+
+          for (
+            let i = 0;
+            i < generatedClips.length;
+            i++
+          ) {
+
+            const clip =
+              generatedClips[i];
+
+
+            const url =
+              clip.url ||
+              clip.download_url ||
+              clip.path;
+
+
+            if (!url) continue;
+
+
+            const response =
+              await fetch(url);
+
+
+            if (!response.ok) continue;
+
+
+            const blob =
+              await response.blob();
+
+
+            const name =
+              clip.name ||
+              clip.filename ||
+              `clip-${i + 1}.mp4`;
+
+
+            zip.file(
+              name,
+              blob
+            );
+
+
+            addedFiles++;
+
+          }
+
+
+          if (!addedFiles) {
+
+            throw new Error(
+              "No clips were available for the ZIP file."
+            );
+
+          }
+
+
+          const zipBlob =
+            await zip.generateAsync({
+              type: "blob"
+            });
+
+
+          const url =
+            URL.createObjectURL(zipBlob);
+
+
+          const link =
+            document.createElement("a");
+
+
+          link.href =
+            url;
+
+
+          link.download =
+            "seccut-clips.zip";
+
+
+          document.body.appendChild(link);
+
+          link.click();
+
+          link.remove();
+
+
+          setTimeout(
+            function () {
+              URL.revokeObjectURL(url);
+            },
+            1000
+          );
+
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "Could not create the ZIP file."
+          );
+
+
+        } finally {
+
+          zipBtn.disabled = false;
+
+          zipBtn.textContent =
+            "Download ZIP";
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       DOWNLOAD ALL
+    ========================= */
+
+    sequentialBtn.addEventListener(
+      "click",
+      async function () {
+
+        if (!generatedClips.length) return;
+
+
+        sequentialBtn.disabled = true;
+
+        sequentialBtn.textContent =
+          "Downloading...";
+
+
+        try {
+
+          for (
+            const clip of generatedClips
+          ) {
+
+            downloadClip(clip);
+
+            await new Promise(
+              resolve =>
+                setTimeout(
+                  resolve,
+                  700
+                )
+            );
+
+          }
+
+        } finally {
+
+          sequentialBtn.disabled = false;
+
+          sequentialBtn.textContent =
+            "Download All";
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       SERVICE WORKER
+    ========================= */
+
+    if (
+      "serviceWorker" in navigator
+    ) {
+
+      window.addEventListener(
+        "load",
+        function () {
+
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then(
+              function () {
+
+                console.log(
+                  "SecCut Service Worker registered."
+                );
+
+              }
+            )
+            .catch(
+              function (error) {
+
+                console.log(
+                  "Service Worker registration failed:",
+                  error
+                );
+
+              }
+            );
+
+        }
       );
 
     }
 
-    sequentialBtn.disabled = false;
-
-    sequentialBtn.textContent = "Download All";
-
-  });
-
-
-  /* SERVICE WORKER */
-
-  if ("serviceWorker" in navigator) {
-
-    window.addEventListener("load", function () {
-
-      navigator.serviceWorker.register("/sw.js")
-        .then(() => {
-          console.log("SecCut Service Worker registered.");
-        })
-        .catch(error => {
-          console.log(
-            "Service Worker registration failed:",
-            error
-          );
-        });
-
-    });
-
-  }
-
-</script>
+  </script>
 
 </body>
 </html>
+```
