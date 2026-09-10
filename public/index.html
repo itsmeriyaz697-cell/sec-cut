@@ -1,1834 +1,3176 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- PWA -->
-  <meta name="theme-color" content="#0a0b0d">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="SecCut">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-  <title>SecCut – Free Online Video Splitter</title>
-
-  <meta
-    name="description"
-    content="SecCut is a simple free online video splitter. Upload a video, choose 15 or 30 second clips, and download your split videos."
-  >
-
-  <meta
-    name="keywords"
-    content="video splitter, split video online, free video cutter, TikTok video splitter, YouTube Shorts, Instagram Reels"
-  >
-
-  <meta name="robots" content="index, follow">
-  <meta name="author" content="Riyaz Chalise">
-
-  <link rel="canonical" href="https://sec-cut.onrender.com/">
-
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="/manifest.json">
-
-  <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="SecCut – Free Online Video Splitter">
-  <meta
-    property="og:description"
-    content="Split videos into short clips quickly and easily with SecCut."
-  >
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://sec-cut.onrender.com/">
-
- 
-
-  <!-- JSZip -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
-  </script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg: #08090b;
-      --card: #111317;
-      --card2: #17191e;
-      --border: #292d34;
-      --text: #f4f5f7;
-      --muted: #9da3ad;
-      --success: #55d98a;
-      --danger: #ff6868;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Inter, Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(
-          circle at 50% -10%,
-          #22252b 0%,
-          #0b0c0f 38%,
-          #08090b 70%
-        );
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    .container {
-      width: min(1100px, calc(100% - 32px));
-      margin: auto;
-    }
-
-    /* =========================
-       HEADER
-    ========================= */
-
-    header {
-      border-bottom: 1px solid rgba(255,255,255,.07);
-      background: rgba(8,9,11,.8);
-      backdrop-filter: blur(14px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .nav {
-      min-height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      font-weight: 800;
-      font-size: 21px;
-      letter-spacing: -.5px;
-    }
-
-    .logo {
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(145deg, #252930, #0d0f12);
-      border: 1px solid #373b43;
-      box-shadow: inset 0 1px rgba(255,255,255,.1);
-    }
-
-    .logo span {
-      font-size: 17px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 22px;
-      color: #aeb4bd;
-      font-size: 14px;
-    }
-
-    .nav-links a {
-      transition: .2s ease;
-    }
-
-    .nav-links a:hover {
-      color: white;
-    }
-
-    /* =========================
-       HERO
-    ========================= */
-
-    .hero {
-      text-align: center;
-      padding: 70px 0 35px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 12px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: rgba(255,255,255,.035);
-      color: #c7ccd3;
-      font-size: 13px;
-      margin-bottom: 18px;
-    }
-
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      background: var(--success);
-      border-radius: 50%;
-    }
-
-    h1 {
-      font-size: clamp(38px, 7vw, 70px);
-      line-height: 1.02;
-      letter-spacing: -3px;
-      margin-bottom: 18px;
-    }
-
-    .hero p {
-      max-width: 680px;
-      margin: auto;
-      color: var(--muted);
-      font-size: 17px;
-    }
-
-    /* =========================
-       VIDEO TOOL
-    ========================= */
-
-    .tool-card {
-      max-width: 850px;
-      margin: 25px auto 80px;
-      padding: 22px;
-      border-radius: 22px;
-      background:
-        linear-gradient(
-          145deg,
-          rgba(255,255,255,.055),
-          rgba(255,255,255,.018)
-        );
-      border: 1px solid var(--border);
-      box-shadow:
-        0 25px 70px rgba(0,0,0,.35),
-        inset 0 1px rgba(255,255,255,.05);
-    }
-
-    .tool-title {
-      margin-bottom: 18px;
-    }
-
-    .tool-title h2 {
-      font-size: 22px;
-      margin-bottom: 4px;
-    }
-
-    .tool-title p {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    /* =========================
-       DROPZONE
-    ========================= */
-
-    .dropzone {
-      border: 2px dashed #383d46;
-      border-radius: 18px;
-      min-height: 270px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 35px 20px;
-      cursor: pointer;
-      transition: .2s ease;
-      background: rgba(255,255,255,.015);
-    }
-
-    .dropzone:hover,
-    .dropzone.dragover {
-      border-color: #858b95;
-      background: rgba(255,255,255,.04);
-      transform: translateY(-1px);
-    }
-
-    .upload-icon {
-      width: 70px;
-      height: 70px;
-      border-radius: 20px;
-      background: #1a1d22;
-      border: 1px solid #30343b;
-      display: grid;
-      place-items: center;
-      margin: 0 auto 18px;
-      font-size: 30px;
-    }
-
-    .dropzone h3 {
-      font-size: 21px;
-      margin-bottom: 7px;
-    }
-
-    .dropzone p {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 16px;
-    }
-
-    .browse-btn {
-      display: inline-block;
-      padding: 10px 17px;
-      border-radius: 9px;
-      background: white;
-      color: #090a0c;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .formats {
-      color: #737983;
-      font-size: 12px;
-      margin-top: 12px;
-    }
-
-    #fileInput {
-      display: none;
-    }
-
-    /* =========================
-       SELECTED FILE
-    ========================= */
-
-    .file-box {
-      display: none;
-      margin-top: 15px;
-      padding: 15px;
-      border-radius: 14px;
-      background: #16191e;
-      border: 1px solid var(--border);
-      align-items: center;
-      gap: 13px;
-    }
-
-    .file-box.show {
-      display: flex;
-    }
-
-    .file-icon {
-      width: 45px;
-      height: 45px;
-      border-radius: 10px;
-      background: #24272d;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-    }
-
-    .file-info {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .file-name {
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .file-size {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .remove-file {
-      border: 0;
-      background: transparent;
-      color: #8c929c;
-      cursor: pointer;
-      font-size: 20px;
-      padding: 5px;
-    }
-
-    .remove-file:hover {
-      color: var(--danger);
-    }
-
-    /* =========================
-       OPTIONS
-    ========================= */
-
-    .options {
-      margin-top: 22px;
-    }
-
-    .options-title {
-      font-weight: 700;
-      margin-bottom: 11px;
-      font-size: 14px;
-    }
-
-    .duration-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .duration-option {
-      position: relative;
-    }
-
-    .duration-option input {
-      position: absolute;
-      opacity: 0;
-    }
-
-    .duration-label {
-      display: block;
-      padding: 15px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      cursor: pointer;
-      background: #121419;
-      transition: .2s;
-    }
-
-    .duration-label strong {
-      display: block;
-      margin-bottom: 2px;
-    }
-
-    .duration-label span {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .duration-option input:checked + .duration-label {
-      border-color: #aeb4bd;
-      background: #1c1f25;
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.08);
-    }
-
-    /* =========================
-       PROCESS BUTTON
-    ========================= */
-
-    .process-btn {
-      width: 100%;
-      margin-top: 18px;
-      padding: 15px;
-      border: 0;
-      border-radius: 12px;
-      background: white;
-      color: #08090b;
-      font-weight: 800;
-      cursor: pointer;
-      transition: .2s;
-    }
-
-    .process-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 25px rgba(255,255,255,.08);
-    }
-
-    .process-btn:disabled {
-      cursor: not-allowed;
-      opacity: .45;
-      transform: none;
-    }
-
-    /* =========================
-       STATUS
-    ========================= */
-
-    .status {
-      display: none;
-      margin-top: 18px;
-      padding: 15px;
-      border-radius: 12px;
-      background: #15181d;
-      border: 1px solid var(--border);
-      color: #c7cbd2;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .status.show {
-      display: block;
-    }
-
-    .spinner {
-      width: 18px;
-      height: 18px;
-      border: 2px solid #444950;
-      border-top-color: white;
-      border-radius: 50%;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 8px;
-      animation: spin .8s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* =========================
-       RESULTS
-    ========================= */
-
-    .results {
-      display: none;
-      margin-top: 25px;
-    }
-
-    .results.show {
-      display: block;
-    }
-
-    .results h3 {
-      margin-bottom: 12px;
-    }
-
-    .clip-list {
-      display: grid;
-      gap: 9px;
-    }
-
-    .clip {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: #15181d;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-
-    .clip-number {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      background: #24272d;
-      border-radius: 9px;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-
-    .clip-name {
-      flex: 1;
-      min-width: 0;
-      font-size: 13px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .download-clip {
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: #24272d;
-      color: white;
-      border: 1px solid #343840;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .download-clip:hover {
-      background: #30343b;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .action-btn {
-      padding: 13px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #171a1f;
-      color: white;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .action-btn:hover {
-      background: #20242a;
-    }
-
-    .action-btn:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    /* =========================
-       FOOTER
-    ========================= */
-
-    footer {
-      border-top: 1px solid rgba(255,255,255,.07);
-      padding: 35px 0;
-      margin-top: 30px;
-      color: #777d87;
-    }
-
-    .footer-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .footer-brand {
-      color: #c7cbd1;
-      font-weight: 700;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 17px;
-      font-size: 13px;
-    }
-
-    .footer-links a {
-      transition: .2s ease;
-    }
-
-    .footer-links a:hover {
-      color: white;
-    }
-
-    .copyright {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #60656e;
-    }
-
-    /* =========================
-       MOBILE
-    ========================= */
-
-    @media (max-width: 700px) {
-
-      .container {
-        width: min(100% - 22px, 1100px);
-      }
-
-      .nav {
-        min-height: 62px;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .hero {
-        padding: 45px 0 25px;
-      }
-
-      h1 {
-        font-size: 43px;
-        letter-spacing: -2px;
-      }
-
-      .hero p {
-        font-size: 15px;
-      }
-
-      .tool-card {
-        padding: 13px;
-        border-radius: 17px;
-        margin-bottom: 55px;
-      }
-
-      .dropzone {
-        min-height: 240px;
-        padding: 25px 12px;
-      }
-
-      .duration-options,
-      .actions {
-        grid-template-columns: 1fr;
-      }
-
-      .clip {
-        align-items: flex-start;
-      }
-
-      .download-clip {
-        margin-left: auto;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>SecCut Studio — Video Editor</title>
+
+<meta name="description"
+content="SecCut Studio is a browser-based video editor for trimming, cutting, cropping and editing videos.">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --bg:#08090b;
+    --panel:#111318;
+    --panel2:#17191f;
+    --panel3:#1d2027;
+    --border:#292d35;
+    --text:#f5f7fa;
+    --muted:#8e96a3;
+    --accent:#ffffff;
+    --danger:#ff5757;
+    --green:#45d483;
+    --timeline:#0d0f13;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+body{
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* =========================
+   APP
+========================= */
+
+.app{
+    width:100%;
+    height:100vh;
+    display:grid;
+    grid-template-rows:58px 1fr 245px;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar{
+    background:#0d0f12;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 16px;
+    z-index:20;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:800;
+    font-size:18px;
+}
+
+.logo{
+    width:32px;
+    height:32px;
+    border-radius:9px;
+    display:grid;
+    place-items:center;
+    background:#20242b;
+    border:1px solid #343943;
+}
+
+.project-name{
+    margin-left:20px;
+    color:#d5d9df;
+    font-size:14px;
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+button{
+    font:inherit;
+}
+
+.btn{
+    border:1px solid var(--border);
+    background:var(--panel2);
+    color:var(--text);
+    padding:8px 13px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.15s;
+    font-size:13px;
+}
+
+.btn:hover{
+    background:var(--panel3);
+}
+
+.btn.primary{
+    background:white;
+    color:#08090b;
+    border-color:white;
+    font-weight:800;
+}
+
+.btn.danger{
+    color:#ff7777;
+}
+
+/* =========================
+   MAIN WORKSPACE
+========================= */
+
+.workspace{
+    min-height:0;
+    display:grid;
+    grid-template-columns:250px 1fr 270px;
+}
+
+/* =========================
+   LEFT SIDEBAR
+========================= */
+
+.sidebar{
+    background:#0e1014;
+    border-right:1px solid var(--border);
+    overflow:auto;
+}
+
+.panel-title{
+    padding:14px 15px;
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#7f8792;
+    border-bottom:1px solid rgba(255,255,255,.04);
+}
+
+.media-area{
+    padding:13px;
+}
+
+.upload{
+    width:100%;
+    min-height:110px;
+    border:1px dashed #414650;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:8px;
+    cursor:pointer;
+    background:#12151a;
+    color:#b9bec7;
+}
+
+.upload:hover{
+    border-color:#777e89;
+    background:#171a20;
+}
+
+.upload-icon{
+    font-size:25px;
+}
+
+.media-list{
+    margin-top:12px;
+    display:grid;
+    gap:8px;
+}
+
+.media-item{
+    padding:9px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:#15181d;
+    cursor:pointer;
+}
+
+.media-item:hover{
+    background:#1b1e24;
+}
+
+.media-thumb{
+    height:70px;
+    background:#090a0d;
+    border-radius:6px;
+    overflow:hidden;
+    margin-bottom:7px;
+}
+
+.media-thumb video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.media-name{
+    font-size:11px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.media-meta{
+    color:#737a85;
+    font-size:10px;
+    margin-top:2px;
+}
+
+.hidden-input{
+    display:none;
+}
+
+/* =========================
+   CENTER
+========================= */
+
+.center{
+    min-width:0;
+    min-height:0;
+    background:#090b0e;
+    display:grid;
+    grid-template-rows:1fr 42px;
+}
+
+.preview-area{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+    overflow:hidden;
+}
+
+.canvas{
+    position:relative;
+    width:min(760px,90%);
+    height:min(430px,80%);
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 20px 70px rgba(0,0,0,.55);
+    overflow:hidden;
+}
+
+.canvas video{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+}
+
+.empty-preview{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:10px;
+    color:#68707b;
+}
+
+.empty-preview strong{
+    color:#b8bec7;
+}
+
+/* =========================
+   PLAYER BAR
+========================= */
+
+.playerbar{
+    border-top:1px solid var(--border);
+    background:#101216;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+}
+
+.player-btn{
+    width:30px;
+    height:30px;
+    border-radius:7px;
+    border:1px solid var(--border);
+    background:#191c21;
+    color:white;
+    cursor:pointer;
+}
+
+.player-btn:hover{
+    background:#262a31;
+}
+
+.time-display{
+    font-size:11px;
+    color:#aab0b9;
+    min-width:95px;
+    text-align:center;
+}
+
+/* =========================
+   RIGHT INSPECTOR
+========================= */
+
+.inspector{
+    background:#0e1014;
+    border-left:1px solid var(--border);
+    overflow:auto;
+}
+
+.inspector-section{
+    padding:15px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.inspector-heading{
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:14px;
+}
+
+.control{
+    margin-bottom:15px;
+}
+
+.control:last-child{
+    margin-bottom:0;
+}
+
+.control label{
+    display:flex;
+    justify-content:space-between;
+    color:#9ca3ad;
+    font-size:11px;
+    margin-bottom:7px;
+}
+
+.control input[type=range]{
+    width:100%;
+    accent-color:white;
+}
+
+.value{
+    color:#e2e5e9;
+}
+
+.select{
+    width:100%;
+    background:#181b20;
+    color:white;
+    border:1px solid var(--border);
+    border-radius:7px;
+    padding:8px;
+    outline:none;
+}
+
+.switch-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12px;
+    color:#adb3bc;
+    margin-bottom:12px;
+}
+
+.switch{
+    width:38px;
+    height:20px;
+    border-radius:20px;
+    background:#30343b;
+    cursor:pointer;
+    position:relative;
+}
+
+.switch::after{
+    content:"";
+    position:absolute;
+    width:16px;
+    height:16px;
+    top:2px;
+    left:2px;
+    border-radius:50%;
+    background:#aaa;
+    transition:.2s;
+}
+
+.switch.active{
+    background:#555;
+}
+
+.switch.active::after{
+    left:20px;
+    background:white;
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+.timeline{
+    background:var(--timeline);
+    border-top:1px solid var(--border);
+    min-width:0;
+    overflow:hidden;
+    display:grid;
+    grid-template-rows:42px 1fr;
+}
+
+.timeline-toolbar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:0 12px;
+    border-bottom:1px solid var(--border);
+}
+
+.timeline-toolbar button{
+    background:#171a1f;
+    border:1px solid var(--border);
+    color:#bfc4cc;
+    border-radius:6px;
+    padding:5px 9px;
+    cursor:pointer;
+    font-size:11px;
+}
+
+.timeline-toolbar button:hover{
+    color:white;
+}
+
+.timeline-scroll{
+    overflow:auto;
+    padding:12px;
+}
+
+.timeline-ruler{
+    height:22px;
+    position:relative;
+    min-width:700px;
+    margin-left:75px;
+    border-bottom:1px solid #282c33;
+}
+
+.tick{
+    position:absolute;
+    bottom:0;
+    height:8px;
+    border-left:1px solid #4a4f58;
+}
+
+.tick span{
+    position:absolute;
+    bottom:9px;
+    left:4px;
+    color:#6f7681;
+    font-size:9px;
+}
+
+.track{
+    min-width:700px;
+    position:relative;
+    height:75px;
+    display:flex;
+    margin-top:8px;
+}
+
+.track-label{
+    width:75px;
+    flex-shrink:0;
+    color:#777f89;
+    font-size:10px;
+    display:flex;
+    align-items:flex-start;
+    padding-top:13px;
+}
+
+.clips{
+    flex:1;
+    height:60px;
+    display:flex;
+    gap:4px;
+    position:relative;
+}
+
+.timeline-clip{
+    height:58px;
+    min-width:90px;
+    background:#20242b;
+    border:1px solid #3a3f48;
+    border-radius:6px;
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+}
+
+.timeline-clip.selected{
+    border:2px solid white;
+}
+
+.clip-thumbnail{
+    position:absolute;
+    inset:0;
+    display:flex;
+    opacity:.45;
+    overflow:hidden;
+}
+
+.clip-thumbnail img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.clip-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,.05),
+        rgba(0,0,0,.7)
+    );
+}
+
+.clip-label{
+    position:absolute;
+    left:7px;
+    bottom:5px;
+    font-size:10px;
+    color:white;
+    max-width:90%;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.clip-duration{
+    position:absolute;
+    right:6px;
+    top:5px;
+    font-size:9px;
+    color:#c7cbd1;
+}
+
+.playhead{
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:#ff5252;
+    z-index:10;
+    pointer-events:none;
+}
+
+.playhead::before{
+    content:"";
+    position:absolute;
+    top:-5px;
+    left:-5px;
+    width:12px;
+    height:12px;
+    background:#ff5252;
+    border-radius:50%;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(8px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-card{
+    width:min(460px,calc(100% - 30px));
+    background:#15181d;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:22px;
+    box-shadow:0 30px 100px rgba(0,0,0,.6);
+}
+
+.modal-card h2{
+    font-size:19px;
+    margin-bottom:8px;
+}
+
+.modal-card p{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:18px;
+}
+
+.modal-card input{
+    width:100%;
+    padding:11px;
+    background:#0d0f13;
+    color:white;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:18px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    bottom:270px;
+    left:50%;
+    transform:translateX(-50%) translateY(20px);
+    padding:10px 15px;
+    background:#20242b;
+    border:1px solid #3a3f47;
+    border-radius:8px;
+    color:white;
+    font-size:12px;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    z-index:200;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* =========================
+   EMPTY TIMELINE
+========================= */
+
+.empty-timeline{
+    color:#5e6671;
+    font-size:11px;
+    padding:18px;
+    text-align:center;
+    width:100%;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .workspace{
+        grid-template-columns:200px 1fr;
+    }
+
+    .inspector{
+        display:none;
+    }
+
+}
+
+@media(max-width:650px){
+
+    html,body{
+        overflow:auto;
+    }
+
+    .app{
+        height:auto;
+        min-height:100vh;
+        grid-template-rows:58px auto 250px;
+    }
+
+    .workspace{
+        grid-template-columns:1fr;
+        height:calc(100vh - 308px);
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .center{
+        min-height:400px;
+    }
+
+    .project-name{
+        display:none;
+    }
+
+    .top-actions .btn:not(.primary){
+        display:none;
+    }
+
+}
+</style>
 </head>
 
 <body>
 
-  <!-- =========================
-       HEADER
-  ========================= -->
+<div class="app">
 
-  <header>
-    <div class="container nav">
+<!-- =========================
+     TOP BAR
+========================= -->
 
-      <a href="/" class="brand" aria-label="SecCut Home">
-        <div class="logo">
-          <span>✂</span>
-        </div>
+<header class="topbar">
 
+    <div class="brand">
+        <div class="logo">✂</div>
         <span>SecCut</span>
-      </a>
+        <span style="color:#686f79">Studio</span>
 
-      <nav class="nav-links" aria-label="Main navigation">
+        <span class="project-name" id="projectName">
+            Untitled Project
+        </span>
+    </div>
 
-        <a href="/how-to-split-video.html">
-          How It Works
-        </a>
+    <div class="top-actions">
 
-        <a href="/faq.html">
-          FAQ
-        </a>
+        <button class="btn" id="newProjectBtn">
+            New Project
+        </button>
 
-        <a href="/about.html">
-          About
-        </a>
+        <button class="btn" id="saveProjectBtn">
+            Save
+        </button>
 
-      </nav>
+        <button class="btn" id="undoBtn">
+            ↶
+        </button>
+
+        <button class="btn" id="redoBtn">
+            ↷
+        </button>
+
+        <button class="btn primary" id="exportBtn">
+            Export
+        </button>
 
     </div>
-  </header>
+
+</header>
 
 
-  <main>
+<!-- =========================
+     WORKSPACE
+========================= -->
 
-    <!-- =========================
-         HERO
-    ========================= -->
+<div class="workspace">
 
-    <section class="hero container">
+<!-- =========================
+     MEDIA SIDEBAR
+========================= -->
 
-      <div class="badge">
-        <span class="badge-dot"></span>
-        Free online video splitter
-      </div>
+<aside class="sidebar">
 
-      <h1>
-        Split videos.<br>
-        Keep it simple.
-      </h1>
+    <div class="panel-title">
+        Media
+    </div>
 
-      <p>
-        Upload a video, choose your clip length, and SecCut will split
-        it into smaller videos ready for short-form content.
-      </p>
+    <div class="media-area">
 
-    </section>
+        <label class="upload">
 
+            <div class="upload-icon">＋</div>
 
-    <!-- =========================
-         VIDEO SPLITTER
-    ========================= -->
+            <strong>Add Media</strong>
 
-    <section class="container">
+            <small>
+                MP4, MOV, WEBM
+            </small>
 
-      <div class="tool-card">
-
-        <div class="tool-title">
-
-          <h2>
-            Split your video
-          </h2>
-
-          <p>
-            Choose a video below to get started.
-          </p>
-
-        </div>
-
-
-        <!-- DROPZONE -->
-
-        <label
-          class="dropzone"
-          id="dropzone"
-          for="fileInput"
-        >
-
-          <div>
-
-            <div class="upload-icon">
-              ↑
-            </div>
-
-            <h3>
-              Drop your video here
-            </h3>
-
-            <p>
-              or click the button below to choose a video
-              from your device
-            </p>
-
-            <span class="browse-btn">
-              Choose Video
-            </span>
-
-            <div class="formats">
-              Supported: MP4, MOV, WEBM
-            </div>
-
-          </div>
+            <input
+                id="mediaInput"
+                class="hidden-input"
+                type="file"
+                accept="video/*"
+                multiple
+            >
 
         </label>
 
-
-        <input
-          type="file"
-          id="fileInput"
-          accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm"
-        >
-
-
-        <!-- SELECTED FILE -->
-
         <div
-          class="file-box"
-          id="fileBox"
-        >
-
-          <div class="file-icon">
-            🎬
-          </div>
-
-          <div class="file-info">
-
-            <div
-              class="file-name"
-              id="fileName"
-            >
-              Video
-            </div>
-
-            <div
-              class="file-size"
-              id="fileSize"
-            >
-              0 MB
-            </div>
-
-          </div>
-
-          <button
-            class="remove-file"
-            id="removeFile"
-            type="button"
-            aria-label="Remove selected video"
-          >
-            ×
-          </button>
-
-        </div>
-
-
-        <!-- OPTIONS -->
-
-        <div class="options">
-
-          <div class="options-title">
-            How long should each clip be?
-          </div>
-
-          <div class="duration-options">
-
-            <div class="duration-option">
-
-              <input
-                type="radio"
-                id="15sec"
-                name="duration"
-                value="15"
-                checked
-              >
-
-              <label
-                class="duration-label"
-                for="15sec"
-              >
-
-                <strong>
-                  15 seconds
-                </strong>
-
-                <span>
-                  Short, fast clips
-                </span>
-
-              </label>
-
-            </div>
-
-
-            <div class="duration-option">
-
-              <input
-                type="radio"
-                id="30sec"
-                name="duration"
-                value="30"
-              >
-
-              <label
-                class="duration-label"
-                for="30sec"
-              >
-
-                <strong>
-                  30 seconds
-                </strong>
-
-                <span>
-                  Longer short-form clips
-                </span>
-
-              </label>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- PROCESS BUTTON -->
-
-        <button
-          class="process-btn"
-          id="processBtn"
-          type="button"
-          disabled
-        >
-          Split My Video
-        </button>
-
-
-        <!-- STATUS -->
-
-        <div
-          class="status"
-          id="status"
-          role="status"
-          aria-live="polite"
+            class="media-list"
+            id="mediaList"
         ></div>
-
-
-        <!-- RESULTS -->
-
-        <div
-          class="results"
-          id="results"
-        >
-
-          <h3>
-            Your clips
-          </h3>
-
-          <div
-            class="clip-list"
-            id="clipList"
-          ></div>
-
-          <div class="actions">
-
-            <button
-              class="action-btn"
-              id="zipBtn"
-              type="button"
-            >
-              Download ZIP
-            </button>
-
-            <button
-              class="action-btn"
-              id="sequentialBtn"
-              type="button"
-            >
-              Download All
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- =========================
-       FOOTER
-  ========================= -->
-
-  <footer>
-
-    <div class="container">
-
-      <div class="footer-inner">
-
-        <div class="footer-brand">
-          ✂ SecCut
-        </div>
-
-        <div class="footer-links">
-
-          <a href="/about.html">
-            About
-          </a>
-
-          <a href="/how-to-split-video.html">
-            How It Works
-          </a>
-
-          <a href="/faq.html">
-            FAQ
-          </a>
-
-          <a href="/privacy.html">
-            Privacy
-          </a>
-
-          <a href="/terms.html">
-            Terms
-          </a>
-
-          <a href="/contact.html">
-            Contact
-          </a>
-
-        </div>
-
-      </div>
-
-      <div class="copyright">
-        © 2026 SecCut. Built by Riyaz Chalise.
-      </div>
 
     </div>
 
-  </footer>
+</aside>
 
 
-  <!-- =========================
-       JAVASCRIPT
-  ========================= -->
+<!-- =========================
+     CENTER EDITOR
+========================= -->
 
-  <script>
+<section class="center">
 
-    const fileInput =
-      document.getElementById("fileInput");
+    <div class="preview-area">
 
-    const dropzone =
-      document.getElementById("dropzone");
+        <div class="canvas" id="canvas">
 
-    const fileBox =
-      document.getElementById("fileBox");
+            <div
+                class="empty-preview"
+                id="emptyPreview"
+            >
+                <div style="font-size:38px">
+                    🎬
+                </div>
 
-    const fileName =
-      document.getElementById("fileName");
+                <strong>
+                    Add a video to start editing
+                </strong>
 
-    const fileSize =
-      document.getElementById("fileSize");
+                <span>
+                    Your preview will appear here
+                </span>
+            </div>
 
-    const removeFile =
-      document.getElementById("removeFile");
+            <video
+                id="previewVideo"
+                playsinline
+                preload="metadata"
+            ></video>
 
-    const processBtn =
-      document.getElementById("processBtn");
+        </div>
 
-    const statusBox =
-      document.getElementById("status");
-
-    const results =
-      document.getElementById("results");
-
-    const clipList =
-      document.getElementById("clipList");
-
-    const zipBtn =
-      document.getElementById("zipBtn");
-
-    const sequentialBtn =
-      document.getElementById("sequentialBtn");
+    </div>
 
 
-    let selectedFile = null;
+    <!-- PLAYER -->
 
-    let generatedClips = [];
+    <div class="playerbar">
+
+        <button
+            class="player-btn"
+            id="prevBtn"
+            title="Previous"
+        >
+            ⏮
+        </button>
+
+        <button
+            class="player-btn"
+            id="playBtn"
+            title="Play"
+        >
+            ▶
+        </button>
+
+        <button
+            class="player-btn"
+            id="nextBtn"
+            title="Next"
+        >
+            ⏭
+        </button>
+
+        <div
+            class="time-display"
+            id="timeDisplay"
+        >
+            00:00 / 00:00
+        </div>
+
+    </div>
+
+</section>
 
 
-    /* =========================
-       FILE SIZE
-    ========================= */
+<!-- =========================
+     INSPECTOR
+========================= -->
 
-    function formatFileSize(bytes) {
+<aside class="inspector">
 
-      if (bytes < 1024 * 1024) {
+    <div class="panel-title">
+        Inspector
+    </div>
 
-        return (
-          (bytes / 1024).toFixed(1) +
-          " KB"
+
+    <!-- TRANSFORM -->
+
+    <div class="inspector-section">
+
+        <div class="inspector-heading">
+            Transform
+        </div>
+
+        <div class="control">
+
+            <label>
+                Aspect Ratio
+            </label>
+
+            <select
+                class="select"
+                id="aspectRatio"
+            >
+                <option value="contain">
+                    Original
+                </option>
+
+                <option value="16/9">
+                    16 : 9
+                </option>
+
+                <option value="9/16">
+                    9 : 16
+                </option>
+
+                <option value="1/1">
+                    1 : 1
+                </option>
+
+                <option value="4/5">
+                    4 : 5
+                </option>
+            </select>
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                Zoom
+                <span class="value" id="zoomValue">
+                    100%
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="zoom"
+                min="50"
+                max="200"
+                value="100"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                Rotation
+                <span class="value" id="rotationValue">
+                    0°
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="rotation"
+                min="-180"
+                max="180"
+                value="0"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- ADJUST -->
+
+    <div class="inspector-section">
+
+        <div class="inspector-heading">
+            Adjust
+        </div>
+
+        <div class="control">
+
+            <label>
+                Brightness
+                <span
+                    class="value"
+                    id="brightnessValue"
+                >
+                    100%
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="brightness"
+                min="50"
+                max="150"
+                value="100"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                Contrast
+                <span
+                    class="value"
+                    id="contrastValue"
+                >
+                    100%
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="contrast"
+                min="50"
+                max="150"
+                value="100"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                Saturation
+                <span
+                    class="value"
+                    id="saturationValue"
+                >
+                    100%
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="saturation"
+                min="0"
+                max="200"
+                value="100"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- AUDIO -->
+
+    <div class="inspector-section">
+
+        <div class="inspector-heading">
+            Audio
+        </div>
+
+        <div class="control">
+
+            <label>
+                Volume
+                <span
+                    class="value"
+                    id="volumeValue"
+                >
+                    100%
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="volume"
+                min="0"
+                max="100"
+                value="100"
+            >
+
+        </div>
+
+        <div class="switch-row">
+
+            <span>
+                Mute
+            </span>
+
+            <div
+                class="switch"
+                id="muteSwitch"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TRIM -->
+
+    <div class="inspector-section">
+
+        <div class="inspector-heading">
+            Trim
+        </div>
+
+        <div class="control">
+
+            <label>
+                Start
+                <span
+                    class="value"
+                    id="startValue"
+                >
+                    00:00
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="trimStart"
+                min="0"
+                max="100"
+                value="0"
+                step="0.01"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                End
+                <span
+                    class="value"
+                    id="endValue"
+                >
+                    00:00
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="trimEnd"
+                min="0"
+                max="100"
+                value="100"
+                step="0.01"
+            >
+
+        </div>
+
+    </div>
+
+</aside>
+
+</div>
+
+
+<!-- =========================
+     TIMELINE
+========================= -->
+
+<section class="timeline">
+
+    <div class="timeline-toolbar">
+
+        <button id="cutBtn">
+            ✂ Cut
+        </button>
+
+        <button id="splitBtn">
+            Split
+        </button>
+
+        <button id="deleteBtn">
+            🗑 Delete
+        </button>
+
+        <button id="duplicateBtn">
+            Duplicate
+        </button>
+
+        <button id="zoomOutBtn">
+            −
+        </button>
+
+        <button id="zoomInBtn">
+            ＋
+        </button>
+
+    </div>
+
+
+    <div
+        class="timeline-scroll"
+        id="timelineScroll"
+    >
+
+        <div
+            class="timeline-ruler"
+            id="timelineRuler"
+        ></div>
+
+
+        <div class="track">
+
+            <div class="track-label">
+                VIDEO
+            </div>
+
+            <div
+                class="clips"
+                id="timelineClips"
+            >
+
+                <div class="empty-timeline">
+                    Add a video to your timeline
+                </div>
+
+            </div>
+
+            <div
+                class="playhead"
+                id="playhead"
+                style="left:75px"
+            ></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<!-- =========================
+     NEW PROJECT MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="projectModal"
+>
+
+    <div class="modal-card">
+
+        <h2>
+            Create Project
+        </h2>
+
+        <p>
+            Give your video project a name.
+        </p>
+
+        <input
+            id="projectInput"
+            placeholder="My Video Project"
+        >
+
+        <div class="modal-actions">
+
+            <button
+                class="btn"
+                id="cancelProject"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="btn primary"
+                id="createProject"
+            >
+                Create Project
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     EXPORT MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="exportModal"
+>
+
+    <div class="modal-card">
+
+        <h2>
+            Export Video
+        </h2>
+
+        <p>
+            Choose your export settings.
+        </p>
+
+        <div class="control">
+
+            <label>
+                Resolution
+            </label>
+
+            <select
+                class="select"
+                id="exportResolution"
+            >
+                <option value="1080">
+                    1080p
+                </option>
+
+                <option value="720">
+                    720p
+                </option>
+
+                <option value="480">
+                    480p
+                </option>
+            </select>
+
+        </div>
+
+        <div class="control">
+
+            <label>
+                Format
+            </label>
+
+            <select
+                class="select"
+                id="exportFormat"
+            >
+                <option value="mp4">
+                    MP4
+                </option>
+
+                <option value="webm">
+                    WEBM
+                </option>
+            </select>
+
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                class="btn"
+                id="cancelExport"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="btn primary"
+                id="startExport"
+            >
+                Export
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   SECCUT STUDIO
+========================================================= */
+
+const mediaInput =
+    document.getElementById("mediaInput");
+
+const mediaList =
+    document.getElementById("mediaList");
+
+const previewVideo =
+    document.getElementById("previewVideo");
+
+const emptyPreview =
+    document.getElementById("emptyPreview");
+
+const timelineClips =
+    document.getElementById("timelineClips");
+
+const projectName =
+    document.getElementById("projectName");
+
+const toast =
+    document.getElementById("toast");
+
+const timeDisplay =
+    document.getElementById("timeDisplay");
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let project = {
+
+    name:"Untitled Project",
+
+    media:[],
+
+    clips:[],
+
+    selectedClip:null,
+
+    currentTime:0,
+
+    zoom:100
+
+};
+
+let history = [];
+
+let future = [];
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function uid(){
+
+    return (
+        Date.now().toString(36) +
+        Math.random().toString(36).slice(2)
+    );
+
+}
+
+
+function formatTime(seconds){
+
+    if(!Number.isFinite(seconds))
+        seconds = 0;
+
+    seconds = Math.max(0,seconds);
+
+    const min =
+        Math.floor(seconds / 60);
+
+    const sec =
+        Math.floor(seconds % 60);
+
+    return (
+        String(min).padStart(2,"0") +
+        ":" +
+        String(sec).padStart(2,"0")
+    );
+
+}
+
+
+function showToast(message){
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(
+        ()=>{
+            toast.classList.remove("show");
+        },
+        1800
+    );
+
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function saveHistory(){
+
+    history.push(
+        JSON.stringify({
+            clips:project.clips,
+            selectedClip:project.selectedClip
+        })
+    );
+
+    if(history.length > 30)
+        history.shift();
+
+    future=[];
+
+}
+
+
+function restoreState(state){
+
+    const data =
+        JSON.parse(state);
+
+    project.clips =
+        data.clips || [];
+
+    project.selectedClip =
+        data.selectedClip || null;
+
+    renderTimeline();
+
+    updateSelectedClip();
+
+}
+
+
+document
+.getElementById("undoBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        if(!history.length){
+
+            showToast("Nothing to undo");
+
+            return;
+
+        }
+
+        future.push(
+            JSON.stringify({
+                clips:project.clips,
+                selectedClip:project.selectedClip
+            })
         );
 
-      }
-
-      return (
-        (bytes / (1024 * 1024)).toFixed(2) +
-        " MB"
-      );
-
-    }
-
-
-    /* =========================
-       STATUS
-    ========================= */
-
-    function showStatus(message, error = false) {
-
-      if (error) {
-
-        statusBox.innerHTML =
-          "⚠️ " + escapeHTML(message);
-
-      } else {
-
-        statusBox.innerHTML =
-          '<span class="spinner"></span>' +
-          escapeHTML(message);
-
-      }
-
-      statusBox.classList.add("show");
-
-    }
-
-
-    /* =========================
-       ESCAPE HTML
-    ========================= */
-
-    function escapeHTML(value) {
-
-      const div =
-        document.createElement("div");
-
-      div.textContent = String(value);
-
-      return div.innerHTML;
-
-    }
-
-
-    /* =========================
-       SELECT FILE
-    ========================= */
-
-    function handleFile(file) {
-
-      if (!file) return;
-
-
-      const allowedTypes = [
-        "video/mp4",
-        "video/quicktime",
-        "video/webm"
-      ];
-
-      const extension =
-        file.name
-          .split(".")
-          .pop()
-          .toLowerCase();
-
-
-      const allowedExtensions = [
-        "mp4",
-        "mov",
-        "webm"
-      ];
-
-
-      if (
-        !allowedTypes.includes(file.type) &&
-        !allowedExtensions.includes(extension)
-      ) {
-
-        showStatus(
-          "Please choose an MP4, MOV, or WEBM video.",
-          true
+        restoreState(
+            history.pop()
         );
+
+    }
+);
+
+
+document
+.getElementById("redoBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        if(!future.length){
+
+            showToast("Nothing to redo");
+
+            return;
+
+        }
+
+        history.push(
+            JSON.stringify({
+                clips:project.clips,
+                selectedClip:project.selectedClip
+            })
+        );
+
+        restoreState(
+            future.pop()
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ADD MEDIA
+========================================================= */
+
+mediaInput.addEventListener(
+    "change",
+    event=>{
+
+        const files =
+            [...event.target.files];
+
+        files.forEach(
+            file=>{
+                addMedia(file);
+            }
+        );
+
+        mediaInput.value="";
+
+    }
+);
+
+
+function addMedia(file){
+
+    if(!file.type.startsWith("video/")){
+
+        showToast("Please choose a video file");
 
         return;
 
-      }
+    }
+
+    const id =
+        uid();
+
+    const url =
+        URL.createObjectURL(file);
+
+    const item = {
+
+        id,
+
+        file,
+
+        url,
+
+        name:file.name,
+
+        duration:0
+
+    };
+
+    project.media.push(item);
+
+    renderMedia();
+
+    /* Load duration */
+
+    const temp =
+        document.createElement("video");
+
+    temp.preload="metadata";
+
+    temp.src=url;
+
+    temp.onloadedmetadata=()=>{
+
+        item.duration =
+            temp.duration || 0;
+
+        renderMedia();
+
+        addClipToTimeline(item);
+
+    };
+
+}
 
 
-      selectedFile = file;
+/* =========================================================
+   MEDIA UI
+========================================================= */
+
+function renderMedia(){
+
+    mediaList.innerHTML="";
+
+    project.media.forEach(
+        media=>{
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "media-item";
+
+            item.innerHTML=`
+
+                <div class="media-thumb">
+
+                    <video
+                        src="${media.url}"
+                        muted
+                        preload="metadata"
+                    ></video>
+
+                </div>
+
+                <div class="media-name">
+                    ${escapeHTML(media.name)}
+                </div>
+
+                <div class="media-meta">
+                    ${formatTime(media.duration)}
+                </div>
+            `;
+
+            item.addEventListener(
+                "dblclick",
+                ()=>{
+                    addClipToTimeline(media);
+                }
+            );
+
+            mediaList.appendChild(item);
+
+        }
+    );
+
+}
 
 
-      fileName.textContent =
-        file.name;
+/* =========================================================
+   ADD CLIP TO TIMELINE
+========================================================= */
 
-      fileSize.textContent =
-        formatFileSize(file.size);
+function addClipToTimeline(media){
+
+    saveHistory();
+
+    const clip = {
+
+        id:uid(),
+
+        mediaId:media.id,
+
+        name:media.name,
+
+        start:0,
+
+        end:media.duration,
+
+        duration:media.duration,
+
+        volume:1,
+
+        muted:false,
+
+        brightness:100,
+
+        contrast:100,
+
+        saturation:100,
+
+        zoom:100,
+
+        rotation:0,
+
+        aspect:"contain"
+
+    };
+
+    project.clips.push(clip);
+
+    project.selectedClip =
+        clip.id;
+
+    renderTimeline();
+
+    updateSelectedClip();
+
+    loadClip(clip);
+
+}
 
 
-      fileBox.classList.add("show");
+/* =========================================================
+   LOAD CLIP
+========================================================= */
 
-      processBtn.disabled = false;
+function loadClip(clip){
 
-      results.classList.remove("show");
+    if(!clip)
+        return;
 
-      statusBox.classList.remove("show");
+    const media =
+        project.media.find(
+            m=>m.id===clip.mediaId
+        );
+
+    if(!media)
+        return;
+
+    previewVideo.src =
+        media.url;
+
+    previewVideo.currentTime =
+        clip.start || 0;
+
+    previewVideo.volume =
+        clip.volume ?? 1;
+
+    previewVideo.muted =
+        clip.muted || false;
+
+    emptyPreview.style.display =
+        "none";
+
+    applyVisuals(clip);
+
+    updateTime();
+
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+function renderTimeline(){
+
+    timelineClips.innerHTML="";
+
+    if(!project.clips.length){
+
+        timelineClips.innerHTML=`
+            <div class="empty-timeline">
+                Add a video to your timeline
+            </div>
+        `;
+
+        return;
 
     }
 
-
-    /* =========================
-       FILE INPUT
-    ========================= */
-
-    fileInput.addEventListener(
-      "change",
-      function () {
-
-        if (this.files.length > 0) {
-
-          handleFile(this.files[0]);
-
-        }
-
-      }
-    );
-
-
-    /* =========================
-       DRAG OVER
-    ========================= */
-
-    dropzone.addEventListener(
-      "dragover",
-      function (event) {
-
-        event.preventDefault();
-
-        dropzone.classList.add("dragover");
-
-      }
-    );
-
-
-    /* =========================
-       DRAG LEAVE
-    ========================= */
-
-    dropzone.addEventListener(
-      "dragleave",
-      function () {
-
-        dropzone.classList.remove("dragover");
-
-      }
-    );
-
-
-    /* =========================
-       DROP
-    ========================= */
-
-    dropzone.addEventListener(
-      "drop",
-      function (event) {
-
-        event.preventDefault();
-
-        dropzone.classList.remove("dragover");
-
-        const file =
-          event.dataTransfer.files[0];
-
-        handleFile(file);
-
-      }
-    );
-
-
-    /* =========================
-       REMOVE FILE
-    ========================= */
-
-    removeFile.addEventListener(
-      "click",
-      function (event) {
-
-        event.preventDefault();
-
-        event.stopPropagation();
-
-
-        selectedFile = null;
-
-        generatedClips = [];
-
-        fileInput.value = "";
-
-        fileBox.classList.remove("show");
-
-        processBtn.disabled = true;
-
-        results.classList.remove("show");
-
-        clipList.innerHTML = "";
-
-        statusBox.classList.remove("show");
-
-      }
-    );
-
-
-    /* =========================
-       PROCESS VIDEO
-    ========================= */
-
-    processBtn.addEventListener(
-      "click",
-      async function () {
-
-        if (!selectedFile) return;
-
-
-        const duration =
-          document.querySelector(
-            'input[name="duration"]:checked'
-          ).value;
-
-
-        processBtn.disabled = true;
-
-
-        showStatus(
-          "Uploading and splitting your video. Please wait..."
-        );
-
-
-        results.classList.remove("show");
-
-        clipList.innerHTML = "";
-
-        generatedClips = [];
-
-
-        try {
-
-          const formData =
-            new FormData();
-
-
-          formData.append(
-            "video",
-            selectedFile
-          );
-
-
-          formData.append(
-            "duration",
-            duration
-          );
-
-
-          const response =
-            await fetch(
-              "/api/split",
-              {
-                method: "POST",
-                body: formData
-              }
-            );
-
-
-          if (!response.ok) {
-
-            let message =
-              "Something went wrong while processing your video.";
-
-
-            try {
-
-              const data =
-                await response.json();
-
-
-              if (data.error) {
-
-                message =
-                  data.error;
-
-              }
-
-            } catch (_) {}
-
-
-            throw new Error(message);
-
-          }
-
-
-          const data =
-            await response.json();
-
-
-          if (
-            !data.clips ||
-            !Array.isArray(data.clips)
-          ) {
-
-            throw new Error(
-              "No clips were returned by the server."
-            );
-
-          }
-
-
-          generatedClips =
-            data.clips;
-
-
-          renderResults(
-            generatedClips
-          );
-
-
-          statusBox.innerHTML =
-            "✓ Your video has been split successfully.";
-
-
-          statusBox.classList.add("show");
-
-          results.classList.add("show");
-
-
-        } catch (error) {
-
-          console.error(error);
-
-
-          statusBox.innerHTML =
-            "⚠️ " +
-            escapeHTML(
-              error.message ||
-              "Something went wrong."
-            );
-
-
-          statusBox.classList.add("show");
-
-
-        } finally {
-
-          processBtn.disabled = false;
-
-        }
-
-      }
-    );
-
-
-    /* =========================
-       RENDER RESULTS
-    ========================= */
-
-    function renderResults(clips) {
-
-      clipList.innerHTML = "";
-
-
-      clips.forEach(
-        function (clip, index) {
-
-          const item =
-            document.createElement("div");
-
-          item.className =
-            "clip";
-
-
-          const number =
-            document.createElement("div");
-
-          number.className =
-            "clip-number";
-
-          number.textContent =
-            index + 1;
-
-
-          const name =
-            document.createElement("div");
-
-          name.className =
-            "clip-name";
-
-          name.textContent =
-            clip.name ||
-            clip.filename ||
-            `Clip ${index + 1}`;
-
-
-          const button =
-            document.createElement("button");
-
-          button.className =
-            "download-clip";
-
-          button.textContent =
-            "Download";
-
-          button.type =
-            "button";
-
-
-          button.addEventListener(
-            "click",
-            function () {
-
-              downloadClip(clip);
+    project.clips.forEach(
+        (clip,index)=>{
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "timeline-clip";
+
+            if(
+                clip.id ===
+                project.selectedClip
+            ){
+
+                item.classList.add(
+                    "selected"
+                );
 
             }
-          );
 
+            const duration =
+                Math.max(
+                    .1,
+                    clip.end - clip.start
+                );
 
-          item.appendChild(number);
+            const width =
+                Math.max(
+                    90,
+                    duration * project.zoom
+                );
 
-          item.appendChild(name);
+            item.style.width =
+                width + "px";
 
-          item.appendChild(button);
+            item.innerHTML=`
 
-          clipList.appendChild(item);
+                <div class="clip-overlay"></div>
+
+                <div class="clip-label">
+                    ${escapeHTML(clip.name)}
+                </div>
+
+                <div class="clip-duration">
+                    ${formatTime(duration)}
+                </div>
+            `;
+
+            item.addEventListener(
+                "click",
+                ()=>{
+                    project.selectedClip =
+                        clip.id;
+
+                    renderTimeline();
+
+                    updateSelectedClip();
+
+                    loadClip(clip);
+
+                }
+            );
+
+            timelineClips.appendChild(item);
 
         }
-      );
+    );
 
-    }
+    renderRuler();
 
-
-    /* =========================
-       DOWNLOAD SINGLE CLIP
-    ========================= */
-
-    function downloadClip(clip) {
-
-      const url =
-        clip.url ||
-        clip.download_url ||
-        clip.path;
+}
 
 
-      if (!url) {
+/* =========================================================
+   RULER
+========================================================= */
 
-        alert(
-          "Download link is not available."
+function renderRuler(){
+
+    const ruler =
+        document.getElementById(
+            "timelineRuler"
         );
 
+    ruler.innerHTML="";
+
+    let total=0;
+
+    project.clips.forEach(
+        clip=>{
+            total +=
+                clip.end - clip.start;
+        }
+    );
+
+    const seconds =
+        Math.max(
+            10,
+            Math.ceil(total)
+        );
+
+    for(
+        let i=0;
+        i<=seconds;
+        i++
+    ){
+
+        const tick =
+            document.createElement("div");
+
+        tick.className="tick";
+
+        tick.style.left =
+            (i * project.zoom) + "px";
+
+        tick.innerHTML =
+            `<span>${formatTime(i)}</span>`;
+
+        ruler.appendChild(tick);
+
+    }
+
+    ruler.style.width =
+        Math.max(
+            700,
+            seconds * project.zoom
+        ) + "px";
+
+}
+
+
+/* =========================================================
+   SELECTED CLIP
+========================================================= */
+
+function getSelectedClip(){
+
+    return project.clips.find(
+        c=>c.id===project.selectedClip
+    );
+
+}
+
+
+function updateSelectedClip(){
+
+    const clip =
+        getSelectedClip();
+
+    if(!clip)
         return;
 
-      }
+    document.getElementById("zoom").value =
+        clip.zoom;
+
+    document.getElementById("rotation").value =
+        clip.rotation;
+
+    document.getElementById("brightness").value =
+        clip.brightness;
+
+    document.getElementById("contrast").value =
+        clip.contrast;
+
+    document.getElementById("saturation").value =
+        clip.saturation;
+
+    document.getElementById("volume").value =
+        clip.volume * 100;
+
+    document.getElementById("trimStart").value =
+        clip.duration
+        ? clip.start / clip.duration * 100
+        : 0;
+
+    document.getElementById("trimEnd").value =
+        clip.duration
+        ? clip.end / clip.duration * 100
+        : 100;
+
+    document.getElementById("zoomValue").textContent =
+        clip.zoom + "%";
+
+    document.getElementById("rotationValue").textContent =
+        clip.rotation + "°";
+
+    document.getElementById("brightnessValue").textContent =
+        clip.brightness + "%";
+
+    document.getElementById("contrastValue").textContent =
+        clip.contrast + "%";
+
+    document.getElementById("saturationValue").textContent =
+        clip.saturation + "%";
+
+    document.getElementById("volumeValue").textContent =
+        Math.round(clip.volume*100) + "%";
+
+    document.getElementById("startValue").textContent =
+        formatTime(clip.start);
+
+    document.getElementById("endValue").textContent =
+        formatTime(clip.end);
+
+    document
+    .getElementById("aspectRatio")
+    .value =
+        clip.aspect;
+
+}
 
 
-      const link =
-        document.createElement("a");
+/* =========================================================
+   VIDEO EVENTS
+========================================================= */
+
+previewVideo.addEventListener(
+    "timeupdate",
+    ()=>{
+
+        updateTime();
+
+        const clip =
+            getSelectedClip();
+
+        if(
+            clip &&
+            previewVideo.currentTime >= clip.end
+        ){
+
+            previewVideo.pause();
+
+            previewVideo.currentTime =
+                clip.start;
+
+        }
+
+        updatePlayhead();
+
+    }
+);
 
 
-      link.href =
-        url;
+previewVideo.addEventListener(
+    "loadedmetadata",
+    ()=>{
+
+        updateTime();
+
+    }
+);
 
 
-      link.download =
-        clip.name ||
-        clip.filename ||
-        "seccut-clip.mp4";
+/* =========================================================
+   PLAY
+========================================================= */
+
+document
+.getElementById("playBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        if(!previewVideo.src){
+
+            showToast("Add a video first");
+
+            return;
+
+        }
+
+        if(previewVideo.paused){
+
+            previewVideo.play();
+
+            document
+            .getElementById("playBtn")
+            .textContent="⏸";
+
+        }else{
+
+            previewVideo.pause();
+
+            document
+            .getElementById("playBtn")
+            .textContent="▶";
+
+        }
+
+    }
+);
 
 
-      link.target =
-        "_blank";
+previewVideo.addEventListener(
+    "pause",
+    ()=>{
+        document
+        .getElementById("playBtn")
+        .textContent="▶";
+    }
+);
+
+previewVideo.addEventListener(
+    "play",
+    ()=>{
+        document
+        .getElementById("playBtn")
+        .textContent="⏸";
+    }
+);
 
 
-      document.body.appendChild(link);
+/* =========================================================
+   TIME
+========================================================= */
 
-      link.click();
+function updateTime(){
 
-      link.remove();
+    timeDisplay.textContent =
+        formatTime(previewVideo.currentTime) +
+        " / " +
+        formatTime(previewVideo.duration);
+
+}
+
+
+function updatePlayhead(){
+
+    const clips =
+        document.getElementById(
+            "timelineClips"
+        );
+
+    if(!clips)
+        return;
+
+    let position=0;
+
+    const current =
+        previewVideo.currentTime;
+
+    for(const clip of project.clips){
+
+        const duration =
+            clip.end - clip.start;
+
+        if(
+            clip.id ===
+            project.selectedClip
+        ){
+
+            position +=
+                Math.max(
+                    0,
+                    current - clip.start
+                ) * project.zoom;
+
+            break;
+
+        }
+
+        position +=
+            duration * project.zoom;
 
     }
 
+    document
+    .getElementById("playhead")
+    .style.left =
+        (75 + position) + "px";
 
-    /* =========================
-       DOWNLOAD ZIP
-    ========================= */
-
-    zipBtn.addEventListener(
-      "click",
-      async function () {
-
-        if (!generatedClips.length) return;
+}
 
 
-        zipBtn.disabled = true;
+/* =========================================================
+   CUT
+========================================================= */
 
-        zipBtn.textContent =
-          "Creating ZIP...";
+document
+.getElementById("cutBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        const clip =
+            getSelectedClip();
+
+        if(!clip){
+
+            showToast("Select a clip");
+
+            return;
+
+        }
+
+        saveHistory();
+
+        const current =
+            previewVideo.currentTime;
+
+        if(
+            current <= clip.start ||
+            current >= clip.end
+        ){
+
+            showToast(
+                "Move playhead inside the clip"
+            );
+
+            return;
+
+        }
+
+        const first = {
+            ...clip,
+            id:uid(),
+            end:current
+        };
+
+        const second = {
+            ...clip,
+            id:uid(),
+            start:current
+        };
+
+        const index =
+            project.clips.findIndex(
+                c=>c.id===clip.id
+            );
+
+        project.clips.splice(
+            index,
+            1,
+            first,
+            second
+        );
+
+        project.selectedClip =
+            first.id;
+
+        renderTimeline();
+
+        updateSelectedClip();
+
+        loadClip(first);
+
+        showToast("Clip cut successfully");
+
+    }
+);
 
 
-        try {
+/* =========================================================
+   SPLIT
+========================================================= */
 
-          const zip =
-            new JSZip();
+document
+.getElementById("splitBtn")
+.addEventListener(
+    "click",
+    ()=>{
+        document
+        .getElementById("cutBtn")
+        .click();
+    }
+);
 
 
-          let addedFiles = 0;
+/* =========================================================
+   DELETE
+========================================================= */
+
+document
+.getElementById("deleteBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        if(!project.selectedClip){
+
+            showToast("Select a clip");
+
+            return;
+
+        }
+
+        saveHistory();
+
+        const index =
+            project.clips.findIndex(
+                c=>c.id===project.selectedClip
+            );
+
+        if(index!==-1){
+
+            project.clips.splice(
+                index,
+                1
+            );
+
+        }
+
+        project.selectedClip =
+            project.clips[index]?.id ||
+            project.clips[index-1]?.id ||
+            null;
+
+        renderTimeline();
+
+        updateSelectedClip();
+
+        const clip =
+            getSelectedClip();
+
+        if(clip)
+            loadClip(clip);
+        else{
+
+            previewVideo.pause();
+
+            previewVideo.removeAttribute("src");
+
+            previewVideo.load();
+
+            emptyPreview.style.display =
+                "flex";
+
+        }
+
+        showToast("Clip deleted");
+
+    }
+);
 
 
-          for (
-            let i = 0;
-            i < generatedClips.length;
-            i++
-          ) {
+/* =========================================================
+   DUPLICATE
+========================================================= */
+
+document
+.getElementById("duplicateBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        const clip =
+            getSelectedClip();
+
+        if(!clip){
+
+            showToast("Select a clip");
+
+            return;
+
+        }
+
+        saveHistory();
+
+        const copy = {
+            ...clip,
+            id:uid()
+        };
+
+        const index =
+            project.clips.findIndex(
+                c=>c.id===clip.id
+            );
+
+        project.clips.splice(
+            index+1,
+            0,
+            copy
+        );
+
+        project.selectedClip =
+            copy.id;
+
+        renderTimeline();
+
+        updateSelectedClip();
+
+        loadClip(copy);
+
+        showToast("Clip duplicated");
+
+    }
+);
+
+
+/* =========================================================
+   ZOOM TIMELINE
+========================================================= */
+
+document
+.getElementById("zoomInBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        project.zoom =
+            Math.min(
+                300,
+                project.zoom + 20
+            );
+
+        renderTimeline();
+
+    }
+);
+
+
+document
+.getElementById("zoomOutBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        project.zoom =
+            Math.max(
+                30,
+                project.zoom - 20
+            );
+
+        renderTimeline();
+
+    }
+);
+
+
+/* =========================================================
+   INSPECTOR CONTROLS
+========================================================= */
+
+function bindRange(
+    id,
+    property,
+    valueId,
+    suffix=""
+){
+
+    const input =
+        document.getElementById(id);
+
+    input.addEventListener(
+        "input",
+        ()=>{
 
             const clip =
-              generatedClips[i];
+                getSelectedClip();
 
+            if(!clip)
+                return;
 
-            const url =
-              clip.url ||
-              clip.download_url ||
-              clip.path;
+            clip[property] =
+                Number(input.value);
 
+            document
+            .getElementById(valueId)
+            .textContent =
+                input.value + suffix;
 
-            if (!url) continue;
+            applyVisuals(clip);
 
+            if(property==="volume"){
 
-            const response =
-              await fetch(url);
+                previewVideo.volume =
+                    clip.volume;
 
-
-            if (!response.ok) continue;
-
-
-            const blob =
-              await response.blob();
-
-
-            const name =
-              clip.name ||
-              clip.filename ||
-              `clip-${i + 1}.mp4`;
-
-
-            zip.file(
-              name,
-              blob
-            );
-
-
-            addedFiles++;
-
-          }
-
-
-          if (!addedFiles) {
-
-            throw new Error(
-              "No clips were available for the ZIP file."
-            );
-
-          }
-
-
-          const zipBlob =
-            await zip.generateAsync({
-              type: "blob"
-            });
-
-
-          const url =
-            URL.createObjectURL(zipBlob);
-
-
-          const link =
-            document.createElement("a");
-
-
-          link.href =
-            url;
-
-
-          link.download =
-            "seccut-clips.zip";
-
-
-          document.body.appendChild(link);
-
-          link.click();
-
-          link.remove();
-
-
-          setTimeout(
-            function () {
-              URL.revokeObjectURL(url);
-            },
-            1000
-          );
-
-
-        } catch (error) {
-
-          console.error(error);
-
-          alert(
-            "Could not create the ZIP file."
-          );
-
-
-        } finally {
-
-          zipBtn.disabled = false;
-
-          zipBtn.textContent =
-            "Download ZIP";
+            }
 
         }
-
-      }
     );
 
-
-    /* =========================
-       DOWNLOAD ALL
-    ========================= */
-
-    sequentialBtn.addEventListener(
-      "click",
-      async function () {
-
-        if (!generatedClips.length) return;
+}
 
 
-        sequentialBtn.disabled = true;
+bindRange(
+    "zoom",
+    "zoom",
+    "zoomValue",
+    "%"
+);
 
-        sequentialBtn.textContent =
-          "Downloading...";
+bindRange(
+    "rotation",
+    "rotation",
+    "rotationValue",
+    "°"
+);
+
+bindRange(
+    "brightness",
+    "brightness",
+    "brightnessValue",
+    "%"
+);
+
+bindRange(
+    "contrast",
+    "contrast",
+    "contrastValue",
+    " %"
+);
+
+bindRange(
+    "saturation",
+    "saturation",
+    "saturationValue",
+    "%"
+);
 
 
-        try {
+/* =========================================================
+   ASPECT RATIO
+========================================================= */
 
-          for (
-            const clip of generatedClips
-          ) {
+document
+.getElementById("aspectRatio")
+.addEventListener(
+    "change",
+    function(){
 
-            downloadClip(clip);
+        const clip =
+            getSelectedClip();
 
-            await new Promise(
-              resolve =>
-                setTimeout(
-                  resolve,
-                  700
-                )
-            );
+        if(!clip)
+            return;
 
-          }
+        clip.aspect =
+            this.value;
 
-        } finally {
+        applyAspect(clip);
 
-          sequentialBtn.disabled = false;
-
-          sequentialBtn.textContent =
-            "Download All";
-
-        }
-
-      }
-    );
+    }
+);
 
 
-    /* =========================
-       SERVICE WORKER
-    ========================= */
+function applyAspect(clip){
 
-    if (
-      "serviceWorker" in navigator
-    ) {
+    const canvas =
+        document.getElementById("canvas");
 
-      window.addEventListener(
-        "load",
-        function () {
+    if(clip.aspect==="16/9"){
 
-          navigator.serviceWorker
-            .register("/sw.js")
-            .then(
-              function () {
+        canvas.style.aspectRatio =
+            "16 / 9";
 
-                console.log(
-                  "SecCut Service Worker registered."
-                );
+    }else if(
+        clip.aspect==="9/16"
+    ){
 
-              }
-            )
-            .catch(
-              function (error) {
+        canvas.style.aspectRatio =
+            "9 / 16";
 
-                console.log(
-                  "Service Worker registration failed:",
-                  error
-                );
+    }else if(
+        clip.aspect==="1/1"
+    ){
 
-              }
-            );
+        canvas.style.aspectRatio =
+            "1 / 1";
 
-        }
-      );
+    }else if(
+        clip.aspect==="4/5"
+    ){
+
+        canvas.style.aspectRatio =
+            "4 / 5";
+
+    }else{
+
+        canvas.style.aspectRatio =
+            "16 / 9";
 
     }
 
-  </script>
+}
+
+
+/* =========================================================
+   VISUAL FILTERS
+========================================================= */
+
+function applyVisuals(clip){
+
+    previewVideo.style.transform =
+        `scale(${clip.zoom/100})
+         rotate(${clip.rotation}deg)`;
+
+    previewVideo.style.filter =
+        `
+        brightness(${clip.brightness}%)
+        contrast(${clip.contrast}%)
+        saturate(${clip.saturation}%)
+        `;
+
+    applyAspect(clip);
+
+}
+
+
+/* =========================================================
+   MUTE
+========================================================= */
+
+document
+.getElementById("muteSwitch")
+.addEventListener(
+    "click",
+    function(){
+
+        const clip =
+            getSelectedClip();
+
+        if(!clip)
+            return;
+
+        clip.muted =
+            !clip.muted;
+
+        previewVideo.muted =
+            clip.muted;
+
+        this.classList.toggle(
+            "active",
+            clip.muted
+        );
+
+    }
+);
+
+
+/* =========================================================
+   VOLUME
+========================================================= */
+
+document
+.getElementById("volume")
+.addEventListener(
+    "input",
+    function(){
+
+        const clip =
+            getSelectedClip();
+
+        if(!clip)
+            return;
+
+        clip.volume =
+            Number(this.value)/100;
+
+        previewVideo.volume =
+            clip.volume;
+
+        document
+        .getElementById(
+            "volumeValue"
+        )
+        .textContent =
+            this.value + "%";
+
+    }
+);
+
+
+/* =========================================================
+   TRIM START
+========================================================= */
+
+document
+.getElementById("trimStart")
+.addEventListener(
+    "input",
+    function(){
+
+        const clip =
+            getSelectedClip();
+
+        if(!clip)
+            return;
+
+        let value =
+            Number(this.value)/100 *
+            clip.duration;
+
+        if(value >= clip.end)
+            value = clip.end - .1;
+
+        clip.start =
+            Math.max(0,value);
+
+        document
+        .getElementById("startValue")
+        .textContent =
+            formatTime(clip.start);
+
+        previewVideo.currentTime =
+            clip.start;
+
+        renderTimeline();
+
+    }
+);
+
+
+/* =========================================================
+   TRIM END
+========================================================= */
+
+document
+.getElementById("trimEnd")
+.addEventListener(
+    "input",
+    function(){
+
+        const clip =
+            getSelectedClip();
+
+        if(!clip)
+            return;
+
+        let value =
+            Number(this.value)/100 *
+            clip.duration;
+
+        if(value <= clip.start)
+            value = clip.start + .1;
+
+        clip.end =
+            Math.min(
+                clip.duration,
+                value
+            );
+
+        document
+        .getElementById("endValue")
+        .textContent =
+            formatTime(clip.end);
+
+        renderTimeline();
+
+    }
+);
+
+
+/* =========================================================
+   NEW PROJECT
+========================================================= */
+
+document
+.getElementById("newProjectBtn")
+.addEventListener(
+    "click",
+    ()=>{
+        document
+        .getElementById("projectModal")
+        .classList.add("show");
+    }
+);
+
+
+document
+.getElementById("cancelProject")
+.addEventListener(
+    "click",
+    ()=>{
+        document
+        .getElementById("projectModal")
+        .classList.remove("show");
+    }
+);
+
+
+document
+.getElementById("createProject")
+.addEventListener(
+    "click",
+    ()=>{
+
+        const name =
+            document
+            .getElementById("projectInput")
+            .value
+            .trim();
+
+        if(name)
+            project.name=name;
+
+        projectName.textContent =
+            project.name;
+
+        project.clips=[];
+
+        project.selectedClip=null;
+
+        renderTimeline();
+
+        previewVideo.removeAttribute("src");
+
+        previewVideo.load();
+
+        emptyPreview.style.display =
+            "flex";
+
+        document
+        .getElementById("projectModal")
+        .classList.remove("show");
+
+        showToast("New project created");
+
+    }
+);
+
+
+/* =========================================================
+   SAVE PROJECT
+========================================================= */
+
+document
+.getElementById("saveProjectBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        const data = {
+
+            name:project.name,
+
+            clips:project.clips.map(
+                clip=>({...clip})
+            ),
+
+            savedAt:
+                new Date().toISOString()
+
+        };
+
+        localStorage.setItem(
+            "seccut-project",
+            JSON.stringify(data)
+        );
+
+        showToast(
+            "Project saved in browser"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   LOAD SAVED PROJECT
+========================================================= */
+
+function loadSavedProject(){
+
+    const saved =
+        localStorage.getItem(
+            "seccut-project"
+        );
+
+    if(!saved)
+        return;
+
+    try{
+
+        const data =
+            JSON.parse(saved);
+
+        project.name =
+            data.name ||
+            "Untitled Project";
+
+        projectName.textContent =
+            project.name;
+
+        /*
+          Media files themselves cannot be restored
+          from localStorage for security reasons.
+        */
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   EXPORT
+========================================================= */
+
+document
+.getElementById("exportBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        if(!project.clips.length){
+
+            showToast(
+                "Add clips before exporting"
+            );
+
+            return;
+
+        }
+
+        document
+        .getElementById("exportModal")
+        .classList.add("show");
+
+    }
+);
+
+
+document
+.getElementById("cancelExport")
+.addEventListener(
+    "click",
+    ()=>{
+
+        document
+        .getElementById("exportModal")
+        .classList.remove("show");
+
+    }
+);
+
+
+document
+.getElementById("startExport")
+.addEventListener(
+    "click",
+    ()=>{
+
+        /*
+          Browser-only preview editor is ready.
+
+          For real MP4 export, connect FFmpeg.wasm
+          or your backend /api/export endpoint here.
+        */
+
+        showToast(
+            "Export engine needs FFmpeg integration"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event=>{
+
+        /* Space = Play */
+
+        if(
+            event.code==="Space" &&
+            document.activeElement.tagName!=="INPUT"
+        ){
+
+            event.preventDefault();
+
+            document
+            .getElementById("playBtn")
+            .click();
+
+        }
+
+
+        /* Delete */
+
+        if(
+            event.key==="Delete" &&
+            document.activeElement.tagName!=="INPUT"
+        ){
+
+            document
+            .getElementById("deleteBtn")
+            .click();
+
+        }
+
+
+        /* S = Split */
+
+        if(
+            event.key.toLowerCase()==="s" &&
+            document.activeElement.tagName!=="INPUT"
+        ){
+
+            document
+            .getElementById("splitBtn")
+            .click();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PREVIOUS / NEXT
+========================================================= */
+
+document
+.getElementById("prevBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        const index =
+            project.clips.findIndex(
+                c=>c.id===project.selectedClip
+            );
+
+        if(index>0){
+
+            const clip =
+                project.clips[index-1];
+
+            project.selectedClip =
+                clip.id;
+
+            renderTimeline();
+
+            updateSelectedClip();
+
+            loadClip(clip);
+
+        }
+
+    }
+);
+
+
+document
+.getElementById("nextBtn")
+.addEventListener(
+    "click",
+    ()=>{
+
+        const index =
+            project.clips.findIndex(
+                c=>c.id===project.selectedClip
+            );
+
+        if(
+            index>=0 &&
+            index<project.clips.length-1
+        ){
+
+            const clip =
+                project.clips[index+1];
+
+            project.selectedClip =
+                clip.id;
+
+            renderTimeline();
+
+            updateSelectedClip();
+
+            loadClip(clip);
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        String(value);
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+loadSavedProject();
+
+console.log(
+    "SecCut Studio initialized"
+);
+
+</script>
 
 </body>
 </html>
