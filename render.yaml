@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: seccut
-    env: docker
-    plan: free
-    healthCheckPath: /health
-    envVars:
-      - key: PORT
-        value: 10000
